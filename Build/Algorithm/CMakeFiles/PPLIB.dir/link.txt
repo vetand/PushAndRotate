@@ -1,0 +1,2 @@
+/usr/bin/ar qc libPPLIB.a  CMakeFiles/PPLIB.dir/map.cpp.o CMakeFiles/PPLIB.dir/tinyxml2.cpp.o CMakeFiles/PPLIB.dir/decomposition.cpp.o CMakeFiles/PPLIB.dir/moves.cpp.o CMakeFiles/PPLIB.dir/algorithm.cpp.o CMakeFiles/PPLIB.dir/main.cpp.o
+/usr/bin/ranlib libPPLIB.a

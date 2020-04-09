@@ -1,0 +1,16 @@
+/mnt/c/users/Андрей/PushAndRotate/Build/CMakeFiles/install/strip.dir
+/mnt/c/users/Андрей/PushAndRotate/Build/CMakeFiles/edit_cache.dir
+/mnt/c/users/Андрей/PushAndRotate/Build/CMakeFiles/list_install_components.dir
+/mnt/c/users/Андрей/PushAndRotate/Build/CMakeFiles/test.dir
+/mnt/c/users/Андрей/PushAndRotate/Build/CMakeFiles/install/local.dir
+/mnt/c/users/Андрей/PushAndRotate/Build/CMakeFiles/rebuild_cache.dir
+/mnt/c/users/Андрей/PushAndRotate/Build/CMakeFiles/install.dir
+/mnt/c/users/Андрей/PushAndRotate/Build/Algorithm/CMakeFiles/install/strip.dir
+/mnt/c/users/Андрей/PushAndRotate/Build/Algorithm/CMakeFiles/install.dir
+/mnt/c/users/Андрей/PushAndRotate/Build/Algorithm/CMakeFiles/PPLIB.dir
+/mnt/c/users/Андрей/PushAndRotate/Build/Algorithm/CMakeFiles/PushAndRotate.dir
+/mnt/c/users/Андрей/PushAndRotate/Build/Algorithm/CMakeFiles/install/local.dir
+/mnt/c/users/Андрей/PushAndRotate/Build/Algorithm/CMakeFiles/test.dir
+/mnt/c/users/Андрей/PushAndRotate/Build/Algorithm/CMakeFiles/list_install_components.dir
+/mnt/c/users/Андрей/PushAndRotate/Build/Algorithm/CMakeFiles/edit_cache.dir
+/mnt/c/users/Андрей/PushAndRotate/Build/Algorithm/CMakeFiles/rebuild_cache.dir
