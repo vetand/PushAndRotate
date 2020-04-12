@@ -112,7 +112,9 @@ bool PushAndRotate::MovingPhase::clear_vertex(int current, Map& map, const std::
         return true;
     }
     std::vector<int> path;
-    for (int id = 0; id < map.get_width() * map.get_height(); ++id) {
+    std::random_shuffle(this->order.begin(), this->order.end());
+    for (int i = 0; i < map.get_width() * map.get_height(); ++i) {
+        int id = this->order[i];
         x = id % map.get_width();
         y = id / map.get_width();
         if (map.is_free(x, y) && !map.is_start(x, y) && 
@@ -360,8 +362,8 @@ bool PushAndRotate::MovingPhase::swap(int first_id, int second_id, Map& map,
         if (nodes_list[id].subgraph == map.agents[component].subgraph) {
             int degree = map.get_degree(id);
             if (degree >= 3) {
-                int y_new = id % map.get_width();
-                int x_new = id / map.get_height();
+                int x_new = id % map.get_width();
+                int y_new = id / map.get_width();
                 int estimated_dist = std::abs(x - x_new) + std::abs(y - y_new);
                 closest.push_back({estimated_dist, id});
             }
@@ -532,6 +534,8 @@ void PushAndRotate::MovingPhase::full_debug_print(const Map& map) const {
     std::cout << "===============================================" << std::endl;
 }
 
+PushAndRotate::MovingPhase::MovingPhase() {}
+
 PushAndRotate::MovingPhase::MovingPhase(Map& map, const std::vector<Node>& nodes_list, 
                                                                 PushAndRotate* owner) {
     bool polygon = this->is_polygon(map, nodes_list);
@@ -540,13 +544,15 @@ PushAndRotate::MovingPhase::MovingPhase(Map& map, const std::vector<Node>& nodes
     std::vector<int> resolving;
     int current_agent = -1;
     int current_index = 0;
+    for (int id = 0; id < map.get_width() * map.get_height(); ++id) {
+        this->order.push_back(id);
+    }
     while (current_index != map.number_of_agents) {
         if (current_agent == -1) {
             current_agent = owner->agents_order[current_index] - 1;
             ++current_index;
         }
         A_Star path_finder;
-        std::cout << "Start moving agent " << current_agent + 1 << "..." << std::endl;
         int start = map.agents[current_agent].start_y * map.get_width() +
                                                    map.agents[current_agent].start_x;
         int finish = map.agents[current_agent].finish_y * map.get_width() +
@@ -611,9 +617,5 @@ PushAndRotate::MovingPhase::MovingPhase(Map& map, const std::vector<Node>& nodes
             resolving.pop_back();
         }
         this->update_blocked(finished, map, finished_agents);
-        //if (current_agent != -1) {
-        //    break;
-        //}
     }
-    std::cout << "Algorithm complited!" << std::endl;
 }

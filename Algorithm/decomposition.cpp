@@ -34,7 +34,7 @@ void PushAndRotate::BiconnectedPhase::component_dfs(int current, const Map& map,
         ++this->current_time;
         current_color = current_time;
     }
-    std::vector successors = map.find_successors(current);
+    std::vector<int> successors = map.find_successors(current);
     nodes_list[current].component = current_color;
     for (int i = 0; i < successors.size(); ++i) {
         if (!visited[successors[i]]) {
@@ -207,7 +207,7 @@ PushAndRotate::MergePhase::MergePhase(const Map& map, std::vector<Node>& nodes_l
             bool log = merge_dfs(id, map, nodes_list, -1, nodes_list.size(), owner);
         }
     }
-    std::cout << "Merge phase connected! Subgraphs found!" << std::endl;
+    std::cout << "Merge phase complited! Subgraphs found!" << std::endl;
 }
 
 bool PushAndRotate::AssigningPhase::is_inner(int current, const Map& map, 

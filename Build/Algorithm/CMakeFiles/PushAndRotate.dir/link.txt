@@ -1,1 +1,0 @@
-/usr/bin/c++   -std=c++17 -O2 -g  -rdynamic CMakeFiles/PushAndRotate.dir/map.cpp.o CMakeFiles/PushAndRotate.dir/tinyxml2.cpp.o CMakeFiles/PushAndRotate.dir/decomposition.cpp.o CMakeFiles/PushAndRotate.dir/moves.cpp.o CMakeFiles/PushAndRotate.dir/algorithm.cpp.o CMakeFiles/PushAndRotate.dir/main.cpp.o  -o PushAndRotate 

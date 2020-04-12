@@ -170,7 +170,7 @@ void Map::swap_start_finish() {
 
 int Map::get_degree(int id) const {
     int node_x = id % this->get_width();
-    int node_y = id / this->get_height();
+    int node_y = id / this->get_width();
     int counter = 0;
     for (int dx = -1; dx <= 1; ++dx) {
         for (int dy = -1; dy <= 1; ++dy) {
@@ -207,7 +207,7 @@ int Map::get_degree(int id) const {
 std::vector<int> Map::find_successors(int id) const {
     std::vector<int> answer;
     int node_x = id % this->get_width();
-    int node_y = id / this->get_height();
+    int node_y = id / this->get_width();
     for (int dx = -1; dx <= 1; ++dx) {
         for (int dy = -1; dy <= 1; ++dy) {
             if (dx == 0 && dy == 0) {

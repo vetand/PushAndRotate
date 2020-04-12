@@ -1,0 +1,203 @@
+<root>
+    <map>
+        <width>4</width>
+        <height>4</height>
+        <cellsize>1</cellsize>
+        <agents>
+            <agent>
+                <startx>1</startx>
+                <starty>2</starty>
+                <finishx>0</finishx>
+                <finishy>0</finishy>
+            </agent>
+            <agent>
+                <startx>3</startx>
+                <starty>2</starty>
+                <finishx>1</finishx>
+                <finishy>0</finishy>
+            </agent>
+            <agent>
+                <startx>2</startx>
+                <starty>3</starty>
+                <finishx>2</finishx>
+                <finishy>0</finishy>
+            </agent>
+            <agent>
+                <startx>0</startx>
+                <starty>0</starty>
+                <finishx>3</finishx>
+                <finishy>0</finishy>
+            </agent>
+            <agent>
+                <startx>1</startx>
+                <starty>1</starty>
+                <finishx>0</finishx>
+                <finishy>1</finishy>
+            </agent>
+            <agent>
+                <startx>3</startx>
+                <starty>3</starty>
+                <finishx>1</finishx>
+                <finishy>1</finishy>
+            </agent>
+            <agent>
+                <startx>2</startx>
+                <starty>0</starty>
+                <finishx>2</finishx>
+                <finishy>1</finishy>
+            </agent>
+            <agent>
+                <startx>0</startx>
+                <starty>2</starty>
+                <finishx>3</finishx>
+                <finishy>1</finishy>
+            </agent>
+            <agent>
+                <startx>3</startx>
+                <starty>0</starty>
+                <finishx>0</finishx>
+                <finishy>2</finishy>
+            </agent>
+            <agent>
+                <startx>1</startx>
+                <starty>3</starty>
+                <finishx>1</finishx>
+                <finishy>2</finishy>
+            </agent>
+            <agent>
+                <startx>0</startx>
+                <starty>3</starty>
+                <finishx>2</finishx>
+                <finishy>2</finishy>
+            </agent>
+            <agent>
+                <startx>0</startx>
+                <starty>1</starty>
+                <finishx>3</finishx>
+                <finishy>2</finishy>
+            </agent>
+            <agent>
+                <startx>1</startx>
+                <starty>0</starty>
+                <finishx>0</finishx>
+                <finishy>3</finishy>
+            </agent>
+            <agent>
+                <startx>2</startx>
+                <starty>1</starty>
+                <finishx>1</finishx>
+                <finishy>3</finishy>
+            </agent>
+        </agents>
+        <grid>
+            <row>0 0 0 0</row>
+            <row>0 0 0 0</row>
+            <row>0 0 0 0</row>
+            <row>0 0 0 0</row>
+        </grid>
+    </map>
+    <algorithm>
+        <allowdiagonal>true</allowdiagonal>
+        <cutcorners>true</cutcorners>
+        <allowsqueeze>true</allowsqueeze>
+    </algorithm>
+    <log>
+        <turn agent="5" x="2" y="2"/>
+        <turn agent="12" x="1" y="1"/>
+        <turn agent="1" x="0" y="1"/>
+        <turn agent="12" x="1" y="2"/>
+        <turn agent="4" x="1" y="1"/>
+        <turn agent="1" x="0" y="0"/>
+        <turn agent="14" x="3" y="1"/>
+        <turn agent="2" x="2" y="1"/>
+        <turn agent="13" x="0" y="1"/>
+        <turn agent="2" x="1" y="0"/>
+        <turn agent="5" x="2" y="1"/>
+        <turn agent="3" x="2" y="2"/>
+        <turn agent="5" x="3" y="2"/>
+        <turn agent="3" x="2" y="1"/>
+        <turn agent="14" x="2" y="2"/>
+        <turn agent="7" x="3" y="1"/>
+        <turn agent="3" x="2" y="0"/>
+        <turn agent="12" x="2" y="3"/>
+        <turn agent="13" x="1" y="2"/>
+        <turn agent="1" x="0" y="1"/>
+        <turn agent="4" x="0" y="0"/>
+        <turn agent="3" x="1" y="1"/>
+        <turn agent="3" x="2" y="1"/>
+        <turn agent="4" x="1" y="1"/>
+        <turn agent="4" x="2" y="0"/>
+        <turn agent="3" x="1" y="1"/>
+        <turn agent="1" x="0" y="0"/>
+        <turn agent="13" x="0" y="1"/>
+        <turn agent="12" x="1" y="2"/>
+        <turn agent="9" x="2" y="1"/>
+        <turn agent="4" x="3" y="0"/>
+        <turn agent="3" x="2" y="0"/>
+        <turn agent="9" x="1" y="1"/>
+        <turn agent="5" x="2" y="1"/>
+        <turn agent="14" x="3" y="2"/>
+        <turn agent="9" x="2" y="2"/>
+        <turn agent="5" x="1" y="1"/>
+        <turn agent="12" x="2" y="1"/>
+        <turn agent="13" x="1" y="2"/>
+        <turn agent="5" x="0" y="1"/>
+        <turn agent="9" x="1" y="1"/>
+        <turn agent="6" x="2" y="2"/>
+        <turn agent="13" x="2" y="3"/>
+        <turn agent="9" x="1" y="2"/>
+        <turn agent="6" x="1" y="1"/>
+        <turn agent="14" x="3" y="3"/>
+        <turn agent="12" x="3" y="2"/>
+        <turn agent="7" x="2" y="1"/>
+        <turn agent="7" x="3" y="1"/>
+        <turn agent="9" x="2" y="1"/>
+        <turn agent="5" x="1" y="2"/>
+        <turn agent="5" x="2" y="2"/>
+        <turn agent="11" x="1" y="2"/>
+        <turn agent="8" x="0" y="1"/>
+        <turn agent="6" x="0" y="2"/>
+        <turn agent="6" x="0" y="3"/>
+        <turn agent="8" x="0" y="2"/>
+        <turn agent="8" x="1" y="1"/>
+        <turn agent="6" x="0" y="2"/>
+        <turn agent="11" x="0" y="3"/>
+        <turn agent="5" x="1" y="2"/>
+        <turn agent="5" x="0" y="1"/>
+        <turn agent="9" x="1" y="2"/>
+        <turn agent="7" x="2" y="1"/>
+        <turn agent="3" x="3" y="1"/>
+        <turn agent="2" x="2" y="0"/>
+        <turn agent="1" x="1" y="0"/>
+        <turn agent="8" x="0" y="0"/>
+        <turn agent="7" x="1" y="1"/>
+        <turn agent="7" x="2" y="2"/>
+        <turn agent="8" x="1" y="1"/>
+        <turn agent="8" x="2" y="1"/>
+        <turn agent="7" x="1" y="1"/>
+        <turn agent="1" x="0" y="0"/>
+        <turn agent="2" x="1" y="0"/>
+        <turn agent="3" x="2" y="0"/>
+        <turn agent="8" x="3" y="1"/>
+        <turn agent="7" x="2" y="1"/>
+        <turn agent="6" x="1" y="1"/>
+        <turn agent="9" x="0" y="2"/>
+        <turn agent="10" x="1" y="2"/>
+        <turn agent="6" x="2" y="2"/>
+        <turn agent="9" x="1" y="1"/>
+        <turn agent="11" x="0" y="2"/>
+        <turn agent="10" x="0" y="3"/>
+        <turn agent="10" x="1" y="3"/>
+        <turn agent="11" x="0" y="3"/>
+        <turn agent="11" x="1" y="2"/>
+        <turn agent="10" x="0" y="3"/>
+        <turn agent="9" x="0" y="2"/>
+        <turn agent="6" x="1" y="1"/>
+        <turn agent="11" x="2" y="2"/>
+        <turn agent="10" x="1" y="2"/>
+        <turn agent="13" x="1" y="3"/>
+        <turn agent="13" x="0" y="3"/>
+        <turn agent="14" x="2" y="3"/>
+        <turn agent="14" x="1" y="3"/>
+    </log>
+</root>

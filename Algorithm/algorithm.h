@@ -5,6 +5,7 @@
 #include "logger.h"
 
 #include <algorithm>
+#include <cstdlib>
 #include <map>
 #include <queue>
 
@@ -16,7 +17,6 @@ private:
     std::vector<int> subgraphs_order;
     std::vector<int> agents_order;
     Logger logger;
-    bool is_solution;
 
     class BiconnectedPhase {
     private:
@@ -150,8 +150,6 @@ private:
 
         void reverse(Map& map, std::vector<Movement>& moves);
 
-        void undo(Map& map, std::vector<Movement>& moves);
-
         bool clear_vertex(int current, Map& map, const std::set<int>& blocked, 
                                                  std::vector<Movement>& moves);
 
@@ -182,14 +180,25 @@ private:
         void full_debug_print(const Map& map) const;
 
         std::vector<bool> used;
+        std::vector<int> order;
 
     public:
+        MovingPhase();
+
         MovingPhase(Map& map, const std::vector<Node>& nodes_list, PushAndRotate* owner);
+
+        void undo(Map& map, std::vector<Movement>& moves);
     };
 
     void nodes_list_init();
 
+    bool check_answer();
+
+    MovingPhase mover;
+
 public:
+    bool is_solution;
+    
     PushAndRotate(const std::string& file_name_input, const std::string& file_name_output);
 };
 
