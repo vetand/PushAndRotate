@@ -190,6 +190,20 @@ private:
         void undo(Map& map, std::vector<Movement>& moves);
     };
 
+    class PostProcess {
+    private:
+        std::set<int> deleted;
+        std::vector<std::set<int>> events;
+        std::vector<std::set<int>> personal_moves;
+
+        void init(const Map& map, std::vector<Movement>& moves);
+
+        void remove_redundant(const Map& map, std::vector<Movement>& moves);
+
+    public:
+        PostProcess(const Map& map, std::vector<Movement>& moves);
+    };
+
     void nodes_list_init();
 
     bool check_answer();
@@ -200,6 +214,7 @@ public:
     bool is_solution;
     
     PushAndRotate(const std::string& file_name_input, const std::string& file_name_output);
+
 };
 
 #endif

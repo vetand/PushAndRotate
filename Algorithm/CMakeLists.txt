@@ -11,6 +11,7 @@ set(SOURCES         map.cpp
                     decomposition.cpp
                     moves.cpp
                     algorithm.cpp
+		    post-processing.cpp
                     main.cpp
 		    )
 

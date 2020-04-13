@@ -41,6 +41,13 @@ bool PushAndRotate::check_answer() {
         }
         this->map.replace_agent(movement.previous_id, movement.current_id);
     }
+    for (int ind = 0; ind < map.number_of_agents; ++ind) {
+        if (map.agents[ind].start_x != map.agents[ind].finish_x || 
+            map.agents[ind].start_y != map.agents[ind].finish_y) {
+            std::cout << "Agent " << ind + 1 << " did not reach it`s goal position!" << std::endl;
+            return false;
+        }
+    }
     return true;
 }
 
@@ -64,6 +71,7 @@ PushAndRotate::PushAndRotate(const std::string& file_name_input,
     }
     SubgraphsSortPhase(this->map, this->nodes_list, this);
     MovingPhase(this->map, this->nodes_list, this);
+    PostProcess(this->map, this->logger.moves);
     bool correct = this->check_answer();
     logger.print_log_second(this->map);
     if (correct) {
