@@ -618,4 +618,5 @@ PushAndRotate::MovingPhase::MovingPhase(Map& map, const std::vector<Node>& nodes
         }
         this->update_blocked(finished, map, finished_agents);
     }
+    std::cout << "Moving phase complited!" << std::endl;
 }

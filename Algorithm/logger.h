@@ -12,11 +12,17 @@ public:
     int agent_number;
     int previous_id;
     int current_id;
+    int step;
 
     Movement(int input_number, int input_prev, int input_current):
                                 agent_number(input_number),
                                 previous_id(input_prev),
                                 current_id(input_current) {}
+
+    bool operator < (const Movement& other) const {
+        return (std::tie(this->step, this->agent_number, this->previous_id, this->current_id) <
+               std::tie(other.step, other.agent_number, other.previous_id, other.current_id));
+    }
 };
 
 class Logger {
@@ -107,7 +113,7 @@ public:
         document.SaveFile(this->file_name);
     }
 
-    void print_log_second(const Map& map) const {
+    void print_log_second(const Map& map, bool parallel_mode) const {
         tinyxml2::XMLDocument document;
         document.LoadFile(this->file_name);
         tinyxml2::XMLElement* root_tag = document.FirstChildElement("root");
@@ -118,6 +124,7 @@ public:
             turn_tag->SetAttribute("agent", move.agent_number + 1);
             turn_tag->SetAttribute("x", move.current_id % map.get_width());
             turn_tag->SetAttribute("y", move.current_id / map.get_width());
+            turn_tag->SetAttribute("step", move.step);
             log_tag->InsertEndChild(turn_tag);
         }
         document.SaveFile(this->file_name);

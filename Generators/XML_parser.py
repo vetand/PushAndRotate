@@ -113,9 +113,11 @@ class XmlParser:
                         x_attribute = int(item[1])
                     elif item[0] == 'y':
                         y_attribute = int(item[1])
+                    elif item[0] == 'step':
+                        step_attribute = int(item[1])
                     else:
                         agent_attribute = int(item[1]) - 1
-                self.turns.append([agent_attribute, x_attribute, y_attribute])
+                self.turns.append([agent_attribute, x_attribute, y_attribute, step_attribute])
         except Exception:
             messagebox.showerror("Ultimate trace tool", "Incorrect path(s)!")
             self.correct = False

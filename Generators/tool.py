@@ -1139,7 +1139,7 @@ class Simulation(tk.Frame):
         self.master.title("Simulation in progress")
         self.create_buttons()
         self.active = False
-        self.total_steps = len(self.map_info.turns)
+        self.total_steps = self.map_info.turns[-1][3] + 1
         self.step_counter.configure(text = "Steps: 0/" + str(self.total_steps))
 
     def continue_(self):
@@ -1257,6 +1257,7 @@ class Simulation(tk.Frame):
 
     def reset(self):
         self.map.current_step = 0
+        self.map.current_turn = 0
         self.next_button['state'] = 'normal'
         self.continue_button['state'] = 'normal'
         self.undo_button['state'] = 'normal'
@@ -1297,6 +1298,7 @@ class MapPlay(Map):
     def __init__(self, master, cell_size, map_info, options):
         super().__init__(master, cell_size, map_info, options)
         self.SIDEBAR = 2 * FRAME
+        self.current_turn = 0
         self.current_step = 0
         self.turns = map_info.turns
         self.last_position = []
@@ -1334,31 +1336,50 @@ class MapPlay(Map):
         return "OK"
 
     def perform_step(self):
-        turn = self.turns[self.current_step]
+        moved = set()
         self.current_step += 1
-        current_pos = self.agents[turn[0]].start
-        self.last_position[turn[0]].append(current_pos)
-        dx = turn[1] - current_pos[0]
-        dy = turn[2] - current_pos[1]
-        log = self.check_movement(current_pos, dx, dy, turn[0])
-        if log != "OK":
-            messagebox.showerror("Ultimate trace tool", log)
-            return False
-        self.delete_agent(turn[0])
-        self.add_agent(turn[1], turn[2], turn[0])
-        self.add_agent(self.map_info.finish_x[turn[0]], self.map_info.finish_y[turn[0]], turn[0])
+        while self.current_turn < len(self.turns):
+            if self.turns[self.current_turn][3] == self.current_step:
+                break
+            turn = self.turns[self.current_turn]
+            if turn[0] in moved:
+                log = "Step number {}, agent {} was moved twice!".format(self.current_step, 
+                                                                                   turn[0])
+                messagebox.showerror("Ultimate trace tool", log)
+                return False
+            moved.add(turn[0])
+            current_pos = self.agents[turn[0]].start
+            self.last_position[turn[0]].append(current_pos)
+            dx = turn[1] - current_pos[0]
+            dy = turn[2] - current_pos[1]
+            log = self.check_movement(current_pos, dx, dy, turn[0])
+            if log != "OK":
+                messagebox.showerror("Ultimate trace tool", log)
+                return False
+            self.delete_agent(turn[0])
+            self.add_agent(turn[1], turn[2], turn[0])
+            self.add_agent(self.map_info.finish_x[turn[0]], 
+                           self.map_info.finish_y[turn[0]], turn[0])
+            self.current_turn += 1
         return True
 
     def undo(self):
         if self.current_step == 0:
             return
         self.current_step -= 1
-        turn = self.turns[self.current_step]
-        new_pos = self.last_position[turn[0]][-1]
-        self.last_position[turn[0]].pop()
-        self.delete_agent(turn[0])
-        self.add_agent(new_pos[0], new_pos[1], turn[0])
-        self.add_agent(self.map_info.finish_x[turn[0]], self.map_info.finish_y[turn[0]], turn[0])
+        self.current_turn -= 1
+        while self.turns[self.current_turn][3] == self.current_step:
+            turn = self.turns[self.current_turn]
+            new_pos = self.last_position[turn[0]][-1]
+            self.last_position[turn[0]].pop()
+            self.delete_agent(turn[0])
+            self.add_agent(new_pos[0], new_pos[1], turn[0])
+            self.add_agent(self.map_info.finish_x[turn[0]], self.map_info.finish_y[turn[0]], 
+                                                                                    turn[0])
+            if self.current_turn == 0:
+                return
+            self.current_turn -= 1
+        self.current_turn += 1
 
 if __name__ == "__main__":
     root = tk.Tk()

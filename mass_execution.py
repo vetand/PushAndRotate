@@ -24,8 +24,13 @@ if __name__ == "__main__":
             except Exception:
                 pass
 
-            signal = os.system("Bin/PushAndRotate {} {}".format(scene_directory + "/" + name,
-                                                                output_directory + "/" + name))
+            if len(sys.argv) >= 3 and sys.argv[2] == "parallel":
+                command = "Bin/PushAndRotate {} {} parallel".format(scene_directory + "/" + name,
+                                                                    output_directory + "/" + name)
+            else:
+                command = "Bin/PushAndRotate {} {}".format(scene_directory + "/" + name,
+                                                           output_directory + "/" + name)
+            signal = os.system(command)
             if signal == 0:
                 success_counter += 1
             else:

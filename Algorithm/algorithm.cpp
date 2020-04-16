@@ -7,38 +7,49 @@ void PushAndRotate::nodes_list_init() {
     }
 }
 
-bool PushAndRotate::check_answer() {
-    int turn = 0;
+void PushAndRotate::reset_map() {
     std::vector<Movement> move_copy = this->logger.moves;
     while (!move_copy.empty()) {
         this->mover.undo(this->map, move_copy);
     }
+}
+
+bool PushAndRotate::check_answer() {
+    this->reset_map();
+    std::vector<std::set<int>> reserved;
+    reserved.resize(this->logger.moves.back().step + 1);
     for (const auto& movement: this->logger.moves) {
-        ++turn;
         int x = movement.current_id % this->map.get_width();
         int y = movement.current_id / this->map.get_width();
+        int step = movement.step;
         if (!this->map.within_map(x, y)) {
-            std::cout << "Turn " << turn << ", agent " << movement.agent_number + 1
+            std::cout << "Step " << step << ", agent " << movement.agent_number + 1
                                              << " goes out of a map!" << std::endl;
             return false;
         }
         if (this->map.is_obstacle(x, y)) {
-            std::cout << "Turn " << turn << ", agent " << movement.agent_number + 1 
+            std::cout << "Step " << step << ", agent " << movement.agent_number + 1 
                                                  << " hits obstacle!" << std::endl;
             return false;
         }
         if (this->map.is_start(x, y)) {
-            std::cout << "Turn " << turn << ", agent " << movement.agent_number + 1
+            std::cout << "Step " << step << ", agent " << movement.agent_number + 1
                                             << " hits another agent!" << std::endl;
             return false;
         }
         int old_x = movement.previous_id % this->map.get_width();
         int old_y = movement.previous_id / this->map.get_width();
         if (std::abs(x - old_x) > 1 || std::abs(y - old_y) > 1) {
-            std::cout << "Turn " << turn << ", too long jump from agent "
+            std::cout << "Step " << step << ", too long jump from agent "
                                << movement.agent_number + 1 << std::endl;
             return false;
         }
+        if (reserved[step].find(movement.current_id) != reserved[step].end()) {
+            std::cout << "Step " << step << ", edge conflict caused by agent " <<
+                                    movement.agent_number << "!" << std::endl;
+        }
+        reserved[step].insert(movement.current_id);
+        reserved[step].insert(movement.previous_id);
         this->map.replace_agent(movement.previous_id, movement.current_id);
     }
     for (int ind = 0; ind < map.number_of_agents; ++ind) {
@@ -48,11 +59,13 @@ bool PushAndRotate::check_answer() {
             return false;
         }
     }
+    this->reset_map();
     return true;
 }
 
 PushAndRotate::PushAndRotate(const std::string& file_name_input, 
-                             const std::string& file_name_output) : 
+                             const std::string& file_name_output,
+                             bool parallel_mode) : 
                              logger(Logger(file_name_output.c_str())) {
     std::srand(1);
     this->map.get_map(file_name_input.c_str());
@@ -71,11 +84,15 @@ PushAndRotate::PushAndRotate(const std::string& file_name_input,
     }
     SubgraphsSortPhase(this->map, this->nodes_list, this);
     MovingPhase(this->map, this->nodes_list, this);
-    PostProcess(this->map, this->logger.moves);
+    if (parallel_mode) {
+        this->reset_map();
+    }
+    PostProcess(this->map, this->logger.moves, parallel_mode);
+    //bool correct = true;
     bool correct = this->check_answer();
-    logger.print_log_second(this->map);
+    logger.print_log_second(this->map, parallel_mode);
     if (correct) {
-        std::cout << "Result length = " << this->logger.moves.size() << std::endl;
+        std::cout << "Result length = " << this->logger.moves.back().step + 1 << std::endl;
         std::cout << "Algorithm complited!" << std::endl;
         this->is_solution = true;
     } else {

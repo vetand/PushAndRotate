@@ -200,11 +200,15 @@ private:
 
         void remove_redundant(const Map& map, std::vector<Movement>& moves);
 
+        void assign_steps(std::vector<Movement>& moves, Map& map);
+
     public:
-        PostProcess(const Map& map, std::vector<Movement>& moves);
+        PostProcess(Map& map, std::vector<Movement>& moves, bool parallel_mode);
     };
 
     void nodes_list_init();
+
+    void reset_map();
 
     bool check_answer();
 
@@ -213,7 +217,8 @@ private:
 public:
     bool is_solution;
     
-    PushAndRotate(const std::string& file_name_input, const std::string& file_name_output);
+    PushAndRotate(const std::string& file_name_input, const std::string& file_name_output,
+                                                                      bool parallel_mode);
 
 };
 
