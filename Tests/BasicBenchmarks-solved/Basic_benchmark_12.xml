@@ -100,87 +100,46 @@
         <allowsqueeze>true</allowsqueeze>
     </algorithm>
     <log>
-        <turn agent="13" x="3" y="3"/>
-        <turn agent="5" x="3" y="2"/>
-        <turn agent="2" x="3" y="1"/>
-        <turn agent="1" x="3" y="0"/>
-        <turn agent="1" x="4" y="0"/>
-        <turn agent="13" x="4" y="3"/>
-        <turn agent="5" x="3" y="3"/>
-        <turn agent="2" x="3" y="0"/>
-        <turn agent="4" x="3" y="1"/>
-        <turn agent="4" x="3" y="2"/>
-        <turn agent="2" x="3" y="1"/>
-        <turn agent="2" x="2" y="1"/>
-        <turn agent="4" x="3" y="1"/>
-        <turn agent="5" x="3" y="2"/>
-        <turn agent="13" x="3" y="3"/>
-        <turn agent="1" x="3" y="0"/>
-        <turn agent="13" x="4" y="3"/>
-        <turn agent="5" x="3" y="3"/>
-        <turn agent="4" x="3" y="2"/>
-        <turn agent="2" x="3" y="1"/>
-        <turn agent="3" x="2" y="1"/>
-        <turn agent="1" x="2" y="0"/>
-        <turn agent="5" x="3" y="4"/>
-        <turn agent="4" x="3" y="3"/>
-        <turn agent="2" x="3" y="0"/>
-        <turn agent="3" x="3" y="1"/>
-        <turn agent="3" x="3" y="2"/>
-        <turn agent="2" x="3" y="1"/>
-        <turn agent="2" x="2" y="1"/>
-        <turn agent="3" x="3" y="1"/>
-        <turn agent="4" x="3" y="2"/>
-        <turn agent="5" x="3" y="3"/>
-        <turn agent="1" x="3" y="0"/>
-        <turn agent="2" x="2" y="0"/>
-        <turn agent="3" x="2" y="1"/>
-        <turn agent="4" x="3" y="1"/>
-        <turn agent="5" x="3" y="2"/>
-        <turn agent="13" x="3" y="3"/>
-        <turn agent="13" x="4" y="3"/>
-        <turn agent="5" x="3" y="3"/>
-        <turn agent="4" x="3" y="2"/>
-        <turn agent="13" x="5" y="3"/>
-        <turn agent="5" x="3" y="4"/>
-        <turn agent="4" x="3" y="3"/>
-        <turn agent="4" x="4" y="3"/>
-        <turn agent="5" x="3" y="3"/>
-        <turn agent="5" x="3" y="2"/>
-        <turn agent="4" x="3" y="3"/>
-        <turn agent="13" x="4" y="3"/>
-        <turn agent="5" x="3" y="1"/>
-        <turn agent="4" x="3" y="2"/>
-        <turn agent="13" x="3" y="3"/>
-        <turn agent="6" x="4" y="0"/>
-        <turn agent="5" x="4" y="1"/>
-        <turn agent="4" x="3" y="1"/>
-        <turn agent="8" x="3" y="5"/>
-        <turn agent="7" x="3" y="6"/>
-        <turn agent="8" x="3" y="4"/>
-        <turn agent="7" x="3" y="5"/>
-        <turn agent="13" x="4" y="3"/>
-        <turn agent="8" x="3" y="3"/>
-        <turn agent="7" x="3" y="4"/>
-        <turn agent="13" x="5" y="3"/>
-        <turn agent="8" x="3" y="2"/>
-        <turn agent="7" x="3" y="3"/>
-        <turn agent="7" x="4" y="3"/>
-        <turn agent="8" x="3" y="3"/>
-        <turn agent="8" x="3" y="4"/>
-        <turn agent="7" x="3" y="3"/>
-        <turn agent="13" x="4" y="3"/>
-        <turn agent="8" x="3" y="5"/>
-        <turn agent="7" x="3" y="4"/>
-        <turn agent="13" x="3" y="3"/>
-        <turn agent="8" x="3" y="6"/>
-        <turn agent="7" x="3" y="5"/>
-        <turn agent="12" x="2" y="6"/>
-        <turn agent="11" x="2" y="7"/>
-        <turn agent="10" x="3" y="7"/>
-        <turn agent="9" x="4" y="7"/>
-        <turn agent="8" x="4" y="6"/>
-        <turn agent="7" x="3" y="6"/>
-        <turn agent="13" x="3" y="4"/>
+        <turn agent="8" x="3" y="5" step="0"/>
+        <turn agent="13" x="3" y="3" step="0"/>
+        <turn agent="5" x="3" y="2" step="1"/>
+        <turn agent="7" x="3" y="6" step="1"/>
+        <turn agent="13" x="4" y="3" step="1"/>
+        <turn agent="4" x="3" y="1" step="2"/>
+        <turn agent="5" x="3" y="3" step="2"/>
+        <turn agent="12" x="2" y="6" step="2"/>
+        <turn agent="13" x="5" y="3" step="2"/>
+        <turn agent="3" x="2" y="1" step="3"/>
+        <turn agent="4" x="3" y="2" step="3"/>
+        <turn agent="5" x="3" y="4" step="3"/>
+        <turn agent="11" x="2" y="7" step="3"/>
+        <turn agent="2" x="3" y="1" step="4"/>
+        <turn agent="4" x="3" y="3" step="4"/>
+        <turn agent="10" x="3" y="7" step="4"/>
+        <turn agent="1" x="3" y="0" step="5"/>
+        <turn agent="3" x="3" y="2" step="5"/>
+        <turn agent="4" x="4" y="3" step="5"/>
+        <turn agent="9" x="4" y="7" step="5"/>
+        <turn agent="1" x="2" y="0" step="6"/>
+        <turn agent="2" x="2" y="1" step="6"/>
+        <turn agent="5" x="3" y="3" step="6"/>
+        <turn agent="6" x="4" y="0" step="6"/>
+        <turn agent="8" x="4" y="6" step="6"/>
+        <turn agent="1" x="3" y="0" step="7"/>
+        <turn agent="3" x="3" y="1" step="7"/>
+        <turn agent="7" x="3" y="5" step="7"/>
+        <turn agent="2" x="2" y="0" step="8"/>
+        <turn agent="5" x="3" y="2" step="8"/>
+        <turn agent="7" x="3" y="4" step="8"/>
+        <turn agent="3" x="2" y="1" step="9"/>
+        <turn agent="4" x="3" y="3" step="9"/>
+        <turn agent="5" x="4" y="1" step="9"/>
+        <turn agent="7" x="3" y="5" step="9"/>
+        <turn agent="4" x="3" y="2" step="10"/>
+        <turn agent="7" x="3" y="6" step="10"/>
+        <turn agent="13" x="4" y="3" step="10"/>
+        <turn agent="4" x="3" y="1" step="11"/>
+        <turn agent="13" x="3" y="3" step="11"/>
+        <turn agent="13" x="3" y="4" step="12"/>
     </log>
 </root>
