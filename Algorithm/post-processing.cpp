@@ -15,18 +15,18 @@ void PushAndRotate::PostProcess::init(const Map& map, std::vector<Movement>& mov
     }
 
     for (int ind = 0; ind < map.number_of_agents; ++ind) {
-        std::set<int> zero;
+        std::list<int> zero;
         this->personal_moves.push_back(zero);
     }
 
     for (int ind = 0; ind < moves.size(); ++ind) {
-        this->personal_moves[moves[ind].agent_number].insert(ind);
+        this->personal_moves[moves[ind].agent_number].push_back(ind);
     }
 }
 
 void PushAndRotate::PostProcess::remove_redundant(const Map& map, std::vector<Movement>& moves) {
     for (int agent = 0; agent < map.number_of_agents; ++agent) {
-        std::set<int>::iterator it = this->personal_moves[agent].begin();
+        std::list<int>::iterator it = this->personal_moves[agent].begin();
         while (it != this->personal_moves[agent].end()) {
             int num = *it;
             int id = moves[num].previous_id;
@@ -58,33 +58,29 @@ void PushAndRotate::PostProcess::remove_redundant(const Map& map, std::vector<Mo
 void PushAndRotate::PostProcess::assign_steps(std::vector<Movement>& moves, Map& map) {
     this->init(map, moves);
     std::vector<bool> performed;
-    std::set<int> deleted;
+    this->deleted.clear();
     performed.assign(moves.size(), false);
+    int assigned = 0;
+    std::vector<std::list<int>::iterator> current_pos;
+    for (int ind = 0; ind < map.number_of_agents; ++ind) {
+        current_pos.push_back(this->personal_moves[ind].begin());
+    }
     for (int step = 0; step < moves.size(); ++step) {
         std::vector<int> perform_now;
-        std::set<int> agents;
-        for (int ind = step; ind < moves.size(); ++ind) {
-            if (performed[ind]) {
-                continue;
+
+        for (int ind = 0; ind < map.number_of_agents; ++ind) {
+            if (current_pos[ind] != this->personal_moves[ind].end()) {
+                Movement current_move = moves[*current_pos[ind]];
+                int dest = current_move.current_id;
+                if (this->events[dest].lower_bound(step) != this->events[dest].end() &&
+                        moves[*this->events[dest].lower_bound(step)].agent_number == ind) {
+                    perform_now.push_back(*current_pos[ind]);
+                    ++current_pos[ind];
+                }
             }
-            int agent = moves[ind].agent_number;
-            if (agents.find(agent) != agents.end()) {
-                continue;
-            }
-            int dest_point = moves[ind].current_id;
-            int x1 = map.agents[moves[ind].agent_number].start_x;
-            int y1 = map.agents[moves[ind].agent_number].start_y;
-            int x2 = moves[ind].current_id % map.get_width();
-            int y2 = moves[ind].current_id / map.get_width();
-            if (std::abs(x1 - x2) > 1 || std::abs(y1 - y2) > 1 || (x1 == x2 && y1 == y2)) {
-                continue;
-            }
-            if (this->events[dest_point].lower_bound(step) != this->events[dest_point].end() &&
-                    moves[*this->events[dest_point].lower_bound(step)].agent_number == agent) {
-                perform_now.push_back(ind);
-                performed[ind] = true;
-                agents.insert(agent);
-            }
+        }
+        if (perform_now.size() == 0) {
+            break;
         }
         for (int ind: perform_now) {
             Movement move = moves[ind];
@@ -96,22 +92,10 @@ void PushAndRotate::PostProcess::assign_steps(std::vector<Movement>& moves, Map&
             map.replace_agent(y * map.get_width() + x, move.current_id);
             moves[ind].step = step;
         }
-        agents.clear();
-        for (int ind = moves.size() - 1; ind >= step; --ind) {
-            if (performed[ind]) {
-                agents.insert(moves[ind].agent_number);
-            }
-            if (!performed[ind] && agents.find(moves[ind].agent_number) != agents.end()) {
-                this->events[moves[ind].previous_id].erase(ind);
-                this->events[moves[ind].current_id].erase(ind);
-                performed[ind] = true;
-                deleted.insert(ind);
-            }
-        }
     }
     std::vector<Movement> new_moves;
     for (int ind = 0; ind < moves.size(); ++ind) {
-        if (deleted.find(ind) == deleted.end()) {
+        if (this->deleted.find(ind) == this->deleted.end()) {
             new_moves.push_back(moves[ind]);
         }
     }

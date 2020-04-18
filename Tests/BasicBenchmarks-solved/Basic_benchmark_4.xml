@@ -69,13 +69,15 @@
         <allowsqueeze>true</allowsqueeze>
     </algorithm>
     <log>
+        <total-steps>47</total-steps>
+        <paths-summary>387</paths-summary>
+        <moving-phase-time>3</moving-phase-time>
+        <post-processing-time>0</post-processing-time>
         <turn agent="1" x="1" y="1" step="0"/>
         <turn agent="2" x="2" y="1" step="0"/>
-        <turn agent="5" x="4" y="5" step="0"/>
-        <turn agent="8" x="5" y="4" step="0"/>
+        <turn agent="7" x="5" y="4" step="0"/>
+        <turn agent="8" x="4" y="5" step="0"/>
         <turn agent="1" x="2" y="2" step="1"/>
-        <turn agent="5" x="4" y="6" step="1"/>
-        <turn agent="7" x="5" y="6" step="1"/>
         <turn agent="1" x="3" y="3" step="2"/>
         <turn agent="1" x="4" y="4" step="3"/>
         <turn agent="2" x="2" y="2" step="3"/>
@@ -85,56 +87,64 @@
         <turn agent="1" x="6" y="5" step="5"/>
         <turn agent="2" x="4" y="4" step="5"/>
         <turn agent="3" x="2" y="2" step="5"/>
-        <turn agent="2" x="4" y="5" step="6"/>
+        <turn agent="2" x="5" y="5" step="6"/>
         <turn agent="3" x="3" y="3" step="6"/>
+        <turn agent="2" x="4" y="6" step="7"/>
         <turn agent="3" x="4" y="4" step="7"/>
         <turn agent="3" x="5" y="5" step="8"/>
-        <turn agent="2" x="4" y="4" step="9"/>
-        <turn agent="5" x="4" y="5" step="10"/>
-        <turn agent="7" x="4" y="6" step="11"/>
-        <turn agent="3" x="5" y="6" step="12"/>
-        <turn agent="2" x="5" y="5" step="13"/>
-        <turn agent="5" x="4" y="4" step="14"/>
-        <turn agent="3" x="4" y="5" step="15"/>
-        <turn agent="5" x="3" y="3" step="15"/>
-        <turn agent="4" x="5" y="6" step="16"/>
-        <turn agent="8" x="4" y="4" step="16"/>
-        <turn agent="1" x="5" y="4" step="17"/>
-        <turn agent="2" x="6" y="6" step="17"/>
-        <turn agent="2" x="6" y="5" step="18"/>
-        <turn agent="4" x="5" y="5" step="18"/>
-        <turn agent="2" x="6" y="6" step="19"/>
-        <turn agent="3" x="5" y="6" step="19"/>
-        <turn agent="1" x="6" y="5" step="20"/>
-        <turn agent="8" x="5" y="4" step="21"/>
-        <turn agent="5" x="4" y="4" step="22"/>
-        <turn agent="5" x="4" y="5" step="23"/>
-        <turn agent="4" x="4" y="4" step="24"/>
-        <turn agent="2" x="5" y="5" step="25"/>
-        <turn agent="4" x="3" y="3" step="25"/>
-        <turn agent="4" x="2" y="2" step="26"/>
-        <turn agent="5" x="4" y="4" step="26"/>
-        <turn agent="4" x="1" y="1" step="27"/>
-        <turn agent="5" x="3" y="3" step="27"/>
-        <turn agent="7" x="4" y="5" step="27"/>
-        <turn agent="4" x="0" y="1" step="28"/>
-        <turn agent="5" x="2" y="2" step="28"/>
-        <turn agent="8" x="4" y="4" step="28"/>
-        <turn agent="5" x="1" y="2" step="29"/>
-        <turn agent="6" x="5" y="4" step="29"/>
-        <turn agent="8" x="3" y="3" step="29"/>
-        <turn agent="5" x="0" y="2" step="30"/>
-        <turn agent="6" x="4" y="4" step="30"/>
-        <turn agent="8" x="2" y="2" step="30"/>
-        <turn agent="6" x="3" y="3" step="31"/>
-        <turn agent="8" x="1" y="1" step="31"/>
-        <turn agent="6" x="2" y="2" step="32"/>
-        <turn agent="7" x="4" y="4" step="32"/>
-        <turn agent="8" x="1" y="0" step="32"/>
-        <turn agent="6" x="1" y="1" step="33"/>
-        <turn agent="7" x="3" y="3" step="33"/>
+        <turn agent="8" x="4" y="4" step="9"/>
+        <turn agent="8" x="3" y="3" step="10"/>
+        <turn agent="3" x="4" y="4" step="11"/>
+        <turn agent="2" x="5" y="5" step="12"/>
+        <turn agent="2" x="4" y="5" step="13"/>
+        <turn agent="3" x="5" y="5" step="14"/>
+        <turn agent="3" x="4" y="6" step="15"/>
+        <turn agent="2" x="5" y="5" step="16"/>
+        <turn agent="2" x="4" y="4" step="17"/>
+        <turn agent="3" x="5" y="5" step="18"/>
+        <turn agent="5" x="4" y="6" step="19"/>
+        <turn agent="3" x="5" y="6" step="20"/>
+        <turn agent="4" x="5" y="5" step="21"/>
+        <turn agent="4" x="4" y="5" step="22"/>
+        <turn agent="2" x="5" y="5" step="23"/>
+        <turn agent="2" x="6" y="6" step="24"/>
+        <turn agent="8" x="4" y="4" step="24"/>
+        <turn agent="4" x="5" y="5" step="25"/>
+        <turn agent="8" x="4" y="5" step="26"/>
+        <turn agent="4" x="4" y="4" step="27"/>
+        <turn agent="2" x="5" y="5" step="28"/>
+        <turn agent="4" x="3" y="3" step="28"/>
+        <turn agent="4" x="2" y="2" step="29"/>
+        <turn agent="8" x="4" y="4" step="29"/>
+        <turn agent="4" x="1" y="1" step="30"/>
+        <turn agent="5" x="4" y="5" step="30"/>
+        <turn agent="8" x="3" y="3" step="30"/>
+        <turn agent="4" x="0" y="1" step="31"/>
+        <turn agent="5" x="4" y="4" step="31"/>
+        <turn agent="8" x="2" y="2" step="31"/>
+        <turn agent="5" x="3" y="3" step="32"/>
+        <turn agent="8" x="1" y="1" step="32"/>
+        <turn agent="5" x="2" y="2" step="33"/>
+        <turn agent="7" x="4" y="4" step="33"/>
         <turn agent="8" x="0" y="0" step="33"/>
-        <turn agent="7" x="2" y="2" step="34"/>
-        <turn agent="7" x="1" y="2" step="35"/>
+        <turn agent="5" x="1" y="2" step="34"/>
+        <turn agent="6" x="5" y="4" step="34"/>
+        <turn agent="7" x="3" y="3" step="34"/>
+        <turn agent="5" x="0" y="2" step="35"/>
+        <turn agent="6" x="4" y="4" step="35"/>
+        <turn agent="7" x="2" y="2" step="35"/>
+        <turn agent="6" x="3" y="3" step="36"/>
+        <turn agent="7" x="1" y="1" step="36"/>
+        <turn agent="6" x="2" y="2" step="37"/>
+        <turn agent="7" x="1" y="0" step="37"/>
+        <turn agent="6" x="1" y="1" step="38"/>
+        <turn agent="6" x="1" y="2" step="39"/>
+        <turn agent="7" x="1" y="1" step="40"/>
+        <turn agent="7" x="2" y="0" step="41"/>
+        <turn agent="6" x="1" y="1" step="42"/>
+        <turn agent="6" x="1" y="0" step="43"/>
+        <turn agent="7" x="1" y="1" step="44"/>
+        <turn agent="7" x="1" y="2" step="45"/>
+        <turn agent="6" x="1" y="1" step="46"/>
     </log>
 </root>

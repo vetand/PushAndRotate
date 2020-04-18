@@ -63,11 +63,24 @@ bool PushAndRotate::check_answer() {
     return true;
 }
 
+long long PushAndRotate::compute_quality() const {
+    std::unordered_set<int> finished_agents;
+    long long answer = 0;
+    for (int ind = (int)this->logger.moves.size() - 1; ind >= 0; --ind) {
+        if (finished_agents.find(this->logger.moves[ind].agent_number) == finished_agents.end()) {
+            finished_agents.insert(this->logger.moves[ind].agent_number);
+            answer += ind + 1;
+        }
+    }
+    return answer;
+}
+
 PushAndRotate::PushAndRotate(const std::string& file_name_input, 
                              const std::string& file_name_output,
                              bool parallel_mode) : 
                              logger(Logger(file_name_output.c_str())) {
-    std::srand(1);
+    auto begin = std::chrono::steady_clock::now();
+    std::cout << "==================== New simulation ====================" << std::endl;
     this->map.get_map(file_name_input.c_str());
     if (this->map.number_of_agents == 0) {
         this->is_solution = false;
@@ -84,19 +97,34 @@ PushAndRotate::PushAndRotate(const std::string& file_name_input,
     }
     SubgraphsSortPhase(this->map, this->nodes_list, this);
     MovingPhase(this->map, this->nodes_list, this);
+    auto moving_phase = std::chrono::steady_clock::now();
     if (parallel_mode) {
         this->reset_map();
     }
     PostProcess(this->map, this->logger.moves, parallel_mode);
-    //bool correct = true;
     bool correct = this->check_answer();
-    logger.print_log_second(this->map, parallel_mode);
+    std::cout << std::endl;
+    auto end = std::chrono::steady_clock::now();
+    auto moving_phase_time = 
+                std::chrono::duration_cast<std::chrono::milliseconds>(moving_phase - begin);
+    auto post_processing_time = 
+                std::chrono::duration_cast<std::chrono::milliseconds>(end - moving_phase);
+    int total_steps = this->logger.moves.back().step + 1;
+    logger.print_log_second(this->map, parallel_mode, total_steps, this->compute_quality(),
+                                  moving_phase_time.count(), post_processing_time.count());
     if (correct) {
-        std::cout << "Result length = " << this->logger.moves.back().step + 1 << std::endl;
-        std::cout << "Algorithm complited!" << std::endl;
+        std::cout << "Algorithm complited!" << std::endl << std::endl;
+        std::cout << "Number of steps = " << total_steps << std::endl;
+        std::cout << "Lengths summary = " << this->compute_quality() << std::endl;
         this->is_solution = true;
     } else {
         std::cout << "Algorithm got incorrect result!" << std::endl;
         this->is_solution = false;
     }
+    std::cout << "Main part time: " << moving_phase_time.count() << "ms" << std::endl;
+    std::cout << "Optimization part time: " << post_processing_time.count() << "ms" << std::endl;
+    std::cout << "Total time: " << moving_phase_time.count() + 
+                                   post_processing_time.count() << "ms" << std::endl;
+
+    std::cout << "========================================================" << std::endl;
 }

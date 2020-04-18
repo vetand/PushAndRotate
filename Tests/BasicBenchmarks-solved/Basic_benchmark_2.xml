@@ -94,6 +94,10 @@
         <allowsqueeze>true</allowsqueeze>
     </algorithm>
     <log>
+        <total-steps>33</total-steps>
+        <paths-summary>370</paths-summary>
+        <moving-phase-time>2</moving-phase-time>
+        <post-processing-time>0</post-processing-time>
         <turn agent="6" x="2" y="2" step="0"/>
         <turn agent="6" x="1" y="1" step="1"/>
         <turn agent="7" x="3" y="3" step="1"/>

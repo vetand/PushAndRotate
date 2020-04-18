@@ -5,9 +5,11 @@
 #include "logger.h"
 
 #include <algorithm>
-#include <cstdlib>
+#include <chrono>
+#include <list>
 #include <map>
 #include <queue>
+#include <unordered_set>
 
 class PushAndRotate {
 private:
@@ -121,6 +123,9 @@ private:
 
             int get_heuristic(const Map& map, int current_id, int finish_id);
 
+            bool end_loop(int mode, int current_id, int finish_id, const Map& map, 
+                                    const std::unordered_set<int>& checked) const;
+
             class AstarNode {
             public:
                 int id;
@@ -138,7 +143,9 @@ private:
             A_Star();
 
             A_Star(const Map& map, const std::set<int>& blocked, int start_id,
-                                                                 int finish_id);
+                                            int finish_id,
+                                            int mode,
+                                            const std::unordered_set<int>& checked);
 
             bool get_path_found() const;
 
@@ -153,8 +160,8 @@ private:
         bool clear_vertex(int current, Map& map, const std::set<int>& blocked, 
                                                  std::vector<Movement>& moves);
 
-        bool multipush(int& center, int& second_agent, int destination, Map& map, 
-                                                  std::vector<Movement>& moves);
+        bool multipush(int& center, int& second_agent,Map& map, std::vector<Movement>& moves,
+                                                         const std::vector<int>& input_path);
 
         bool clear(int center, int second_agent, Map& map, std::vector<Movement>& moves);
 
@@ -180,7 +187,6 @@ private:
         void full_debug_print(const Map& map) const;
 
         std::vector<bool> used;
-        std::vector<int> order;
 
     public:
         MovingPhase();
@@ -192,11 +198,14 @@ private:
 
     class PostProcess {
     private:
-        std::set<int> deleted;
+        std::unordered_set<int> deleted;
         std::vector<std::set<int>> events;
-        std::vector<std::set<int>> personal_moves;
+        std::vector<std::list<int>> personal_moves;
+        std::vector<std::vector<std::set<int>>> local_moves;
 
         void init(const Map& map, std::vector<Movement>& moves);
+
+        void init_local_moves(const Map& map, std::vector<Movement>& moves);
 
         void remove_redundant(const Map& map, std::vector<Movement>& moves);
 
@@ -211,6 +220,8 @@ private:
     void reset_map();
 
     bool check_answer();
+
+    long long compute_quality() const;
 
     MovingPhase mover;
 

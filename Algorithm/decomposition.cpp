@@ -482,5 +482,5 @@ PushAndRotate::SubgraphsSortPhase::SubgraphsSortPhase(const Map& map,
         }
     }
     std::cout << "Subgraph sort phase completed!" << std::endl;
-    this->print_order(owner);
+    //this->print_order(owner);
 }

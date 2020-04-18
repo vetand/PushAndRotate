@@ -3,6 +3,33 @@
 
 import sys
 import os
+import xml.dom.minidom as minidom
+import xml.etree.ElementTree as ET
+
+def collect_log(directory, files_in_directory):
+    moving_time = 0
+    post_time = 0
+    total_steps = 0
+    total_length = 0
+    for name in files_in_directory:
+        try:
+            doc = minidom.parse(directory + "/" + name)
+            log_tag = doc.getElementsByTagName("log")[0]
+            steps_tag = log_tag.getElementsByTagName("total-steps")[0]
+            quality_tag = log_tag.getElementsByTagName("paths-summary")[0]
+            moving_time_tag = log_tag.getElementsByTagName("moving-phase-time")[0]
+            post_time_tag = log_tag.getElementsByTagName("post-processing-time")[0]
+            total_steps += int(steps_tag.childNodes[0].data)
+            total_length += int(quality_tag.childNodes[0].data)
+            moving_time += int(moving_time_tag.childNodes[0].data)
+            post_time += int(post_time_tag.childNodes[0].data)
+        except Exception:
+            pass
+
+    simulations = len(files_in_directory)
+    print("Average number of steps: {}".format(total_steps // simulations))
+    print("Average paths summary: {}".format(total_length // simulations))
+    print("Average time: {}ms".format((moving_time + post_time) // simulations))
 
 if __name__ == "__main__":
     scene_directory = sys.argv[1]
@@ -44,3 +71,4 @@ if __name__ == "__main__":
 
     print("Successful solves:", success_counter)
     print("Fails:", failure_counter)
+    collect_log(output_directory, os.listdir(output_directory))

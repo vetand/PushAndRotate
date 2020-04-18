@@ -25,11 +25,27 @@ bool PushAndRotate::MovingPhase::A_Star::AstarNode::operator < (const AstarNode&
     return (this->h_value + this->g_value > other.h_value + other.g_value);
 }
 
+bool PushAndRotate::MovingPhase::A_Star::end_loop(int mode, int current_id, int finish_id,
+                            const Map& map, const std::unordered_set<int>& checked) const {
+    if (mode == 0) {
+        return (current_id == finish_id);
+    }
+    if (checked.find(current_id) != checked.end()) {
+        return false;
+    }
+    int x = current_id % map.get_width();
+    int y = current_id / map.get_width();
+    if (mode == 1) {
+        return !map.is_start(x, y);
+    }
+    return (map.get_degree(current_id) >= 3);
+}
+
 PushAndRotate::MovingPhase::A_Star::A_Star() {}
 
 PushAndRotate::MovingPhase::A_Star::A_Star(const Map& map, const std::set<int>& blocked, 
-                                                     int start_id,
-                                                     int finish_id) {
+                                            int start_id, int finish_id, int mode,
+                                            const std::unordered_set<int>& checked) {
     std::priority_queue<AstarNode> queue;
     std::set<int> visited;
     std::map<int, int> previous_id;
@@ -39,14 +55,15 @@ PushAndRotate::MovingPhase::A_Star::A_Star(const Map& map, const std::set<int>& 
     while (!queue.empty()) {
         AstarNode current = queue.top();
         queue.pop();
-        if (current.id == finish_id) {
+        if (this->end_loop(mode, current.id, finish_id, map, checked)) {
             this->path_found = true;
+            finish_id = current.id;
             break;
         }
         std::vector<int> successors = map.find_successors(current.id);
         for (int neighbor: successors) {
             AstarNode new_neighbor = AstarNode(neighbor, map, finish_id, this);
-            int dist_cur = new_neighbor.h_value + new_neighbor.g_value;
+            int dist_cur = new_neighbor.h_value * (mode == 0) + new_neighbor.g_value;
             int dist_new = current.h_value + current.g_value + 1;
             bool lower = (dist_new < dist_cur);
             if (blocked.find(new_neighbor.id) != blocked.end() || 
@@ -60,6 +77,7 @@ PushAndRotate::MovingPhase::A_Star::A_Star(const Map& map, const std::set<int>& 
         }
     }
     if (this->path_found == false) {
+        this->answer.push_back(-1);
         return;
     }
     int current_id = finish_id;
@@ -112,44 +130,33 @@ bool PushAndRotate::MovingPhase::clear_vertex(int current, Map& map, const std::
         return true;
     }
     std::vector<int> path;
-    std::random_shuffle(this->order.begin(), this->order.end());
-    for (int i = 0; i < map.get_width() * map.get_height(); ++i) {
-        int id = this->order[i];
-        x = id % map.get_width();
-        y = id / map.get_width();
-        if (map.is_free(x, y) && !map.is_start(x, y) && 
-                                        blocked.find(id) == blocked.end()) {
-            A_Star path_finder = A_Star(map, blocked, current, id);
-            if (path_finder.get_path_found()) {
-                path = path_finder.get_path();
-            } else {
-                continue;
+
+    std::unordered_set<int> checked;
+    A_Star path_finder = A_Star(map, blocked, current, -1, 1, checked);
+    if (path_finder.get_path_found()) {
+        path = path_finder.get_path();
+    } else {
+        return false;
+    }
+    for (int pos_fin = 0; pos_fin < path.size(); ++pos_fin) {
+        int current_id = path[pos_fin];
+        x = current_id % map.get_width();
+        y = current_id / map.get_width();
+        if (!map.is_start(x, y)) {
+            for (int pos = pos_fin - 1; pos >= 0; --pos) {
+                this->move_agent(path[pos], path[pos + 1], map, moves);
             }
-            for (int pos_fin = 0; pos_fin < path.size(); ++pos_fin) {
-                int current_id = path[pos_fin];
-                x = current_id % map.get_width();
-                y = current_id / map.get_width();
-                if (!map.is_start(x, y)) {
-                    for (int pos = pos_fin - 1; pos >= 0; --pos) {
-                        this->move_agent(path[pos], path[pos + 1], map, moves);
-                    }
-                    return true;
-                }
-            }
+            return true;
         }
     }
     return false;
 }
 
-bool PushAndRotate::MovingPhase::multipush(int& center, int& second_agent, int destination, 
-                                           Map& map, 
-                                           std::vector<Movement>& moves) {
+bool PushAndRotate::MovingPhase::multipush(int& center, int& second_agent,
+                                           Map& map, std::vector<Movement>& moves,
+                                           const std::vector<int>& input_path) {
     std::set<int> blocked;
-    A_Star path_finder = A_Star(map, blocked, second_agent, destination);
-    if (path_finder.get_path_found() == false) {
-        return false;
-    }
-    std::vector<int> path = path_finder.get_path();
+    std::vector<int> path = input_path;
     if (!(path.size() >= 2 && path[1] == center)) {
         std::vector<int> tmp;
         tmp.push_back(center);
@@ -352,30 +359,20 @@ bool PushAndRotate::MovingPhase::push(int current_id, int destination_id, Map& m
 bool PushAndRotate::MovingPhase::swap(int first_id, int second_id, Map& map, 
                                            std::vector<Movement>& moves,
                                            const std::vector<Node>& nodes_list) {
-    int x = first_id % map.get_width();
-    int y = first_id / map.get_width();
-    int component = map.get_agent(x, y);
     int source_first = first_id;
     int source_second = second_id;
-    std::vector<std::pair<int, int>> closest;
-    for (int id = 0; id < map.get_width() * map.get_height(); ++id) {
-        if (nodes_list[id].subgraph == map.agents[component].subgraph) {
-            int degree = map.get_degree(id);
-            if (degree >= 3) {
-                int x_new = id % map.get_width();
-                int y_new = id / map.get_width();
-                int estimated_dist = std::abs(x - x_new) + std::abs(y - y_new);
-                closest.push_back({estimated_dist, id});
-            }
-        }
-    }
-    std::sort(closest.begin(), closest.end());
-    for (std::pair<int, int> point: closest) {
+    std::unordered_set<int> checked;
+    std::set<int> blocked;
+    while (true) {
         std::vector<Movement> new_moves;
-        int id = point.second;
+        A_Star path_finder = A_Star(map, blocked, source_second, -1, 2, checked);
+        if (path_finder.get_path_found() == false) {
+            break;
+        }
+        checked.insert(path_finder.get_path().back());
         first_id = source_first;
         second_id = source_second;
-        int log = this->multipush(first_id, second_id, id, map, new_moves);
+        int log = this->multipush(first_id, second_id, map, new_moves, path_finder.get_path());
         if (!log) {
             continue;
         }
@@ -404,8 +401,11 @@ bool PushAndRotate::MovingPhase::swap(int first_id, int second_id, Map& map,
 }
 
 bool PushAndRotate::MovingPhase::rotate(Map& map, std::vector<Movement>& moves, 
-                                                    const std::vector<int>& cycle,
-                                                    const std::vector<Node>& nodes_list) {
+                                                const std::vector<int>& cycle,
+                                                const std::vector<Node>& nodes_list) {
+    while (true) {
+        std::cout << 1 << std::endl;
+    }
     for (int ind = 0; ind < cycle.size(); ++ind) {
         int x = cycle[ind] % map.get_width();
         int y = cycle[ind] / map.get_width();
@@ -544,24 +544,22 @@ PushAndRotate::MovingPhase::MovingPhase(Map& map, const std::vector<Node>& nodes
     std::vector<int> resolving;
     int current_agent = -1;
     int current_index = 0;
-    for (int id = 0; id < map.get_width() * map.get_height(); ++id) {
-        this->order.push_back(id);
-    }
     while (current_index != map.number_of_agents) {
         if (current_agent == -1) {
             current_agent = owner->agents_order[current_index] - 1;
             ++current_index;
         }
         A_Star path_finder;
+        std::unordered_set<int> ZERO;
         int start = map.agents[current_agent].start_y * map.get_width() +
                                                    map.agents[current_agent].start_x;
         int finish = map.agents[current_agent].finish_y * map.get_width() +
                                                    map.agents[current_agent].finish_x;
         if (polygon) {
-            path_finder = A_Star(map, finished, start, finish);
+            path_finder = A_Star(map, finished, start, finish, 0, ZERO);
         } else {
             std::set<int> blocked_zero;
-            path_finder = A_Star(map, blocked_zero, start, finish);
+            path_finder = A_Star(map, blocked_zero, start, finish, 0, ZERO);
         }
         resolving.push_back(start);
         if (path_finder.get_path_found() == false) {

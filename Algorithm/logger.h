@@ -113,12 +113,30 @@ public:
         document.SaveFile(this->file_name);
     }
 
-    void print_log_second(const Map& map, bool parallel_mode) const {
+    void print_log_second(const Map& map, bool parallel_mode, int steps, long long quality,
+                                                      double time_1, double time_2) const {
         tinyxml2::XMLDocument document;
         document.LoadFile(this->file_name);
         tinyxml2::XMLElement* root_tag = document.FirstChildElement("root");
         tinyxml2::XMLElement* log_tag = document.NewElement("log");
         root_tag->InsertEndChild(log_tag);
+        char buffer[NUMBER_LENGTH];
+        tinyxml2::XMLElement* steps_tag = document.NewElement("total-steps");
+        snprintf(buffer, sizeof(buffer), "%d", steps);
+        steps_tag->InsertEndChild(document.NewText(buffer));
+        log_tag->InsertEndChild(steps_tag);
+        tinyxml2::XMLElement* quality_tag = document.NewElement("paths-summary");
+        snprintf(buffer, sizeof(buffer), "%lld", quality);
+        quality_tag->InsertEndChild(document.NewText(buffer));
+        log_tag->InsertEndChild(quality_tag);
+        tinyxml2::XMLElement* time1_tag = document.NewElement("moving-phase-time");
+        snprintf(buffer, sizeof(buffer), "%g", time_1);
+        time1_tag->InsertEndChild(document.NewText(buffer));
+        log_tag->InsertEndChild(time1_tag);
+        tinyxml2::XMLElement* time2_tag = document.NewElement("post-processing-time");
+        snprintf(buffer, sizeof(buffer), "%g", time_2);
+        time2_tag->InsertEndChild(document.NewText(buffer));
+        log_tag->InsertEndChild(time2_tag);
         for (auto move: this->moves) {
             tinyxml2::XMLElement* turn_tag = document.NewElement("turn");
             turn_tag->SetAttribute("agent", move.agent_number + 1);

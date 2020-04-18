@@ -81,6 +81,10 @@
         <allowsqueeze>true</allowsqueeze>
     </algorithm>
     <log>
+        <total-steps>20</total-steps>
+        <paths-summary>155</paths-summary>
+        <moving-phase-time>3</moving-phase-time>
+        <post-processing-time>0</post-processing-time>
         <turn agent="10" x="3" y="1" step="0"/>
         <turn agent="9" x="4" y="1" step="1"/>
         <turn agent="8" x="5" y="2" step="2"/>
