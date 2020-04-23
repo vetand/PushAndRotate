@@ -75,6 +75,10 @@ long long PushAndRotate::compute_quality() const {
     return answer;
 }
 
+std::vector<int> PushAndRotate::get_agents_order() const {
+    return this->agents_order;
+}
+
 PushAndRotate::PushAndRotate(const std::string& file_name_input, 
                              const std::string& file_name_output,
                              bool parallel_mode) : 
@@ -102,6 +106,7 @@ PushAndRotate::PushAndRotate(const std::string& file_name_input,
         this->reset_map();
     }
     PostProcess(this->map, this->logger.moves, parallel_mode);
+    this->logger.prepare_answer();
     bool correct = this->check_answer();
     std::cout << std::endl;
     auto end = std::chrono::steady_clock::now();
@@ -110,8 +115,8 @@ PushAndRotate::PushAndRotate(const std::string& file_name_input,
     auto post_processing_time = 
                 std::chrono::duration_cast<std::chrono::milliseconds>(end - moving_phase);
     int total_steps = this->logger.moves.back().step + 1;
-    logger.print_log_second(this->map, parallel_mode, total_steps, this->compute_quality(),
-                                  moving_phase_time.count(), post_processing_time.count());
+    logger.print_log_second(this->map, total_steps, this->compute_quality(),
+                    moving_phase_time.count(), post_processing_time.count());
     if (correct) {
         std::cout << "Algorithm complited!" << std::endl << std::endl;
         std::cout << "Number of steps = " << total_steps << std::endl;

@@ -646,8 +646,8 @@
     <log>
         <total-steps>2045</total-steps>
         <paths-summary>411786</paths-summary>
-        <moving-phase-time>30</moving-phase-time>
-        <post-processing-time>14</post-processing-time>
+        <moving-phase-time>47</moving-phase-time>
+        <post-processing-time>27</post-processing-time>
         <turn agent="1" x="5" y="1" step="0"/>
         <turn agent="2" x="6" y="4" step="0"/>
         <turn agent="3" x="8" y="8" step="0"/>

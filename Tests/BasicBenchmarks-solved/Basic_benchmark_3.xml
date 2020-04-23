@@ -59,7 +59,7 @@
     <log>
         <total-steps>38</total-steps>
         <paths-summary>262</paths-summary>
-        <moving-phase-time>2</moving-phase-time>
+        <moving-phase-time>25</moving-phase-time>
         <post-processing-time>0</post-processing-time>
         <turn agent="2" x="2" y="2" step="0"/>
         <turn agent="1" x="1" y="1" step="1"/>

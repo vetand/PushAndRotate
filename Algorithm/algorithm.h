@@ -9,16 +9,15 @@
 #include <list>
 #include <map>
 #include <queue>
+#include <unordered_map>
 #include <unordered_set>
 
 class PushAndRotate {
 private:
-    Map map;
     std::vector<Node> nodes_list;
     std::vector<int> connect_empty;
     std::vector<int> subgraphs_order;
     std::vector<int> agents_order;
-    Logger logger;
 
     class BiconnectedPhase {
     private:
@@ -227,9 +226,13 @@ private:
 
 public:
     bool is_solution;
+    Logger logger;
+    Map map;
+
+    std::vector<int> get_agents_order() const;
     
     PushAndRotate(const std::string& file_name_input, const std::string& file_name_output,
-                                                                      bool parallel_mode);
+                                                  bool parallel_mode);
 
 };
 

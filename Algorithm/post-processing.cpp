@@ -100,16 +100,6 @@ void PushAndRotate::PostProcess::assign_steps(std::vector<Movement>& moves, Map&
         }
     }
     moves = new_moves;
-    std::sort(moves.begin(), moves.end());
-    int current_step = 0;
-    int real_step = 0;
-    for (int ind = 0; ind < moves.size(); ++ind) {
-        if (ind > 0 && moves[ind].step != current_step) {
-            ++real_step;
-        }
-        current_step = moves[ind].step;
-        moves[ind].step = real_step;
-    }
 }
 
 PushAndRotate::PostProcess::PostProcess(Map& map, std::vector<Movement>& moves,

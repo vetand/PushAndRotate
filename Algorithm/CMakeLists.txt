@@ -12,6 +12,7 @@ set(SOURCES         map.cpp
                     moves.cpp
                     algorithm.cpp
 		    post-processing.cpp
+		    priorities.cpp
                     main.cpp
 		    )
 

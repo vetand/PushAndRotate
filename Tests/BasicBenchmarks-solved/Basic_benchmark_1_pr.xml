@@ -81,29 +81,21 @@
         <allowsqueeze>true</allowsqueeze>
     </algorithm>
     <log>
-        <total-steps>20</total-steps>
-        <paths-summary>155</paths-summary>
-        <moving-phase-time>21</moving-phase-time>
-        <post-processing-time>0</post-processing-time>
-        <turn agent="10" x="3" y="1" step="0"/>
-        <turn agent="9" x="4" y="1" step="1"/>
-        <turn agent="8" x="5" y="2" step="2"/>
-        <turn agent="7" x="5" y="3" step="3"/>
-        <turn agent="6" x="4" y="4" step="4"/>
-        <turn agent="5" x="3" y="5" step="5"/>
-        <turn agent="4" x="2" y="5" step="6"/>
-        <turn agent="3" x="1" y="4" step="7"/>
-        <turn agent="2" x="1" y="3" step="8"/>
-        <turn agent="1" x="1" y="2" step="9"/>
-        <turn agent="10" x="2" y="1" step="10"/>
-        <turn agent="9" x="3" y="1" step="11"/>
-        <turn agent="8" x="4" y="1" step="12"/>
-        <turn agent="7" x="5" y="2" step="13"/>
-        <turn agent="6" x="5" y="3" step="14"/>
-        <turn agent="5" x="4" y="4" step="15"/>
-        <turn agent="4" x="3" y="5" step="16"/>
-        <turn agent="3" x="2" y="5" step="17"/>
-        <turn agent="2" x="1" y="4" step="18"/>
-        <turn agent="1" x="1" y="3" step="19"/>
+        <total-steps>4</total-steps>
+        <paths-summary>50</paths-summary>
+        <moving-phase-time>22</moving-phase-time>
+        <post-processing-time>6</post-processing-time>
+        <turn agent="1" x="3" y="1" step="0"/>
+        <turn agent="1" x="2" y="1" step="1"/>
+        <turn agent="1" x="1" y="2" step="2"/>
+        <turn agent="3" x="1" y="4" step="2"/>
+        <turn agent="5" x="3" y="5" step="2"/>
+        <turn agent="7" x="5" y="3" step="2"/>
+        <turn agent="9" x="4" y="1" step="2"/>
+        <turn agent="1" x="1" y="3" step="3"/>
+        <turn agent="3" x="2" y="5" step="3"/>
+        <turn agent="5" x="4" y="4" step="3"/>
+        <turn agent="7" x="5" y="2" step="3"/>
+        <turn agent="9" x="3" y="1" step="3"/>
     </log>
 </root>

@@ -4,7 +4,6 @@
 import sys
 import os
 import xml.dom.minidom as minidom
-import xml.etree.ElementTree as ET
 
 def collect_log(directory, files_in_directory):
     moving_time = 0
@@ -53,6 +52,10 @@ if __name__ == "__main__":
 
             if len(sys.argv) >= 3 and sys.argv[2] == "parallel":
                 command = "Bin/PushAndRotate {} {} parallel".format(scene_directory + "/" + name,
+                                                                    output_directory + "/" + name)
+                if len(sys.argv) >= 4 and sys.argv[3] == "priorities":
+                    command = "Bin/PushAndRotate {} {} parallel priorities".format(
+                                                                    scene_directory + "/" + name,
                                                                     output_directory + "/" + name)
             else:
                 command = "Bin/PushAndRotate {} {}".format(scene_directory + "/" + name,

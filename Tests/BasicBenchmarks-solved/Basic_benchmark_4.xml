@@ -71,7 +71,7 @@
     <log>
         <total-steps>47</total-steps>
         <paths-summary>387</paths-summary>
-        <moving-phase-time>3</moving-phase-time>
+        <moving-phase-time>19</moving-phase-time>
         <post-processing-time>0</post-processing-time>
         <turn agent="1" x="1" y="1" step="0"/>
         <turn agent="2" x="2" y="1" step="0"/>

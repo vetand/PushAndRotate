@@ -5,7 +5,6 @@ import random
 import time
 import tkinter as tk
 import xml.dom.minidom as minidom
-import xml.etree.ElementTree as ET
 import sys
 
 from XML_parser import *

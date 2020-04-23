@@ -113,8 +113,8 @@
     <log>
         <total-steps>198</total-steps>
         <paths-summary>3289</paths-summary>
-        <moving-phase-time>4</moving-phase-time>
-        <post-processing-time>0</post-processing-time>
+        <moving-phase-time>27</moving-phase-time>
+        <post-processing-time>1</post-processing-time>
         <turn agent="8" x="4" y="4" step="0"/>
         <turn agent="11" x="1" y="2" step="0"/>
         <turn agent="13" x="0" y="2" step="0"/>

@@ -3,6 +3,7 @@
 
 const int NUMBER_LENGTH = 20;
 
+#include <algorithm>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -23,6 +24,7 @@ public:
         return (std::tie(this->step, this->agent_number, this->previous_id, this->current_id) <
                std::tie(other.step, other.agent_number, other.previous_id, other.current_id));
     }
+
 };
 
 class Logger {
@@ -113,8 +115,9 @@ public:
         document.SaveFile(this->file_name);
     }
 
-    void print_log_second(const Map& map, bool parallel_mode, int steps, long long quality,
-                                                      double time_1, double time_2) const {
+    void print_log_second(const Map& map, int steps, long long quality,
+                                        double time_1, double time_2) {
+        this->prepare_answer();
         tinyxml2::XMLDocument document;
         document.LoadFile(this->file_name);
         tinyxml2::XMLElement* root_tag = document.FirstChildElement("root");
@@ -146,6 +149,19 @@ public:
             log_tag->InsertEndChild(turn_tag);
         }
         document.SaveFile(this->file_name);
+    }
+
+    void prepare_answer() {
+        std::sort(this->moves.begin(), this->moves.end());
+        int current_step = 0;
+        int real_step = 0;
+        for (int ind = 0; ind < this->moves.size(); ++ind) {
+            if (ind > 0 && this->moves[ind].step != current_step) {
+                ++real_step;
+            }
+            current_step = this->moves[ind].step;
+            this->moves[ind].step = real_step;
+        }
     }
 };
 

@@ -47,8 +47,8 @@ PushAndRotate::MovingPhase::A_Star::A_Star(const Map& map, const std::set<int>& 
                                             int start_id, int finish_id, int mode,
                                             const std::unordered_set<int>& checked) {
     std::priority_queue<AstarNode> queue;
-    std::set<int> visited;
-    std::map<int, int> previous_id;
+    std::unordered_set<int> visited;
+    std::unordered_map<int, int> previous_id;
     AstarNode start_node = AstarNode(start_id, map, finish_id, this);
     queue.push(start_node);
     this->path_found = false;
@@ -403,9 +403,6 @@ bool PushAndRotate::MovingPhase::swap(int first_id, int second_id, Map& map,
 bool PushAndRotate::MovingPhase::rotate(Map& map, std::vector<Movement>& moves, 
                                                 const std::vector<int>& cycle,
                                                 const std::vector<Node>& nodes_list) {
-    while (true) {
-        std::cout << 1 << std::endl;
-    }
     for (int ind = 0; ind < cycle.size(); ++ind) {
         int x = cycle[ind] % map.get_width();
         int y = cycle[ind] / map.get_width();

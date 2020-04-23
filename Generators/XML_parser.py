@@ -1,5 +1,4 @@
 import xml.dom.minidom as minidom
-import xml.etree.ElementTree as ET
 import tkinter as tk
 from tkinter import messagebox
 
@@ -102,23 +101,18 @@ class XmlParser:
             return
         if mode == "load":
             return
-        try:
-            log_tag = doc.getElementsByTagName("log")[0]
-            turns_tag = doc.getElementsByTagName("turn")
-            self.turns = []
-            for turn_tag in turns_tag:
-                list_ = turn_tag.attributes.items()
-                for item in list_:
-                    if item[0] == 'x':
-                        x_attribute = int(item[1])
-                    elif item[0] == 'y':
-                        y_attribute = int(item[1])
-                    elif item[0] == 'step':
-                        step_attribute = int(item[1])
-                    else:
-                        agent_attribute = int(item[1]) - 1
-                self.turns.append([agent_attribute, x_attribute, y_attribute, step_attribute])
-        except Exception:
-            messagebox.showerror("Ultimate trace tool", "Incorrect path(s)!")
-            self.correct = False
-            return
+        log_tag = doc.getElementsByTagName("log")[0]
+        turns_tag = doc.getElementsByTagName("turn")
+        self.turns = []
+        for turn_tag in turns_tag:
+            list_ = turn_tag.attributes.items()
+            for item in list_:
+                if item[0] == 'x':
+                    x_attribute = int(item[1])
+                elif item[0] == 'y':
+                    y_attribute = int(item[1])
+                elif item[0] == 'step':
+                    step_attribute = int(item[1])
+                else:
+                    agent_attribute = int(item[1]) - 1
+            self.turns.append([agent_attribute, x_attribute, y_attribute, step_attribute])
