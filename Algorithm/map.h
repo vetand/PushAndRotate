@@ -11,6 +11,7 @@
 #include <vector>
 
 struct Agent {
+    int id;
     int start_x;
     int start_y;
     int finish_x;
@@ -49,7 +50,6 @@ public:
     bool is_free(int i, int j) const;
     bool is_obstacle(int i, int j) const;
     bool within_map(int i, int j) const;
-    double get_cell_size() const;
     bool is_start(int x, int y) const;
     bool not_assigned(int x, int y) const;
     int get_agent(int x, int y) const;

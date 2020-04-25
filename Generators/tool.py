@@ -5,6 +5,7 @@ import random
 import time
 import tkinter as tk
 import xml.dom.minidom as minidom
+import xml.etree.ElementTree as ET
 import sys
 
 from XML_parser import *
@@ -272,8 +273,7 @@ class Map:
         self.cell_label = tk.Label(self.master, text = "(" + str(x) + ", " + str(y) +")" +
                                                  ", id = " + str(y * self.map_info.width + x),
                                                  bg=ENTRY_COLOR , font=("Helvetica", 16))
-        self.cell_label.place(x = event.x + self.SIDEBAR,
-                              y = event.y, anchor="ne")
+        self.cell_label.place(x = event.x + self.SIDEBAR, y = event.y, anchor="ne")
 
     def shift_left(self, event):
         return
@@ -578,8 +578,6 @@ class ManualGenerator(tk.Frame):
         width_tag.text = str(self.map_info.width)
         height_tag = ET.SubElement(map_tag, 'height')
         height_tag.text = str(self.map_info.height)
-        cellsize_tag = ET.SubElement(map_tag, 'cellsize')
-        cellsize_tag.text = self.algo_ops['cellsize'].get()
 
         if len(self.map.agents) == 1:
             startx_tag = ET.SubElement(map_tag, 'startx')
@@ -592,8 +590,10 @@ class ManualGenerator(tk.Frame):
             finishy_tag.text = str(self.map.agents[0].finish[1])
         else:
             agents_tag = ET.SubElement(map_tag, 'agents')
+            current_id = 1
             for agent in self.map.agents:
-                agent_tag = ET.SubElement(agents_tag, 'agent')
+                agent_tag = ET.SubElement(agents_tag, 'agent', id = str(current_id))
+                current_id += 1
                 startx_tag = ET.SubElement(agent_tag, 'startx')
                 startx_tag.text = str(agent.start[0])
                 starty_tag = ET.SubElement(agent_tag, 'starty')
@@ -616,27 +616,12 @@ class ManualGenerator(tk.Frame):
                     row_string += " "
             new_row_tag.text = row_string
 
-        algorithm_tag = ET.SubElement(root_tag, 'algorithm')
-        search_tag = ET.SubElement(algorithm_tag, 'searchtype')
-        search_tag.text = self.algo_ops['algorithm'].get()
-        metric_tag = ET.SubElement(algorithm_tag, 'metrictype')
-        metric_tag.text = self.algo_ops['metric'].get()
-        breaking_ties_tag = ET.SubElement(algorithm_tag, 'breakingties')
-        breaking_ties_tag.text = self.algo_ops['breakingties'].get()
-        hweight_tag = ET.SubElement(algorithm_tag, 'hweight')
-        hweight_tag.text = self.algo_ops['hweight'].get()
-        diagonal_tag = ET.SubElement(algorithm_tag, 'allowdiagonal')
+        diagonal_tag = ET.SubElement(map_tag, 'allowdiagonal')
         diagonal_tag.text = self.algo_ops['allowdiagonal'].get()
-        corners_tag = ET.SubElement(algorithm_tag, 'cutcorners')
+        corners_tag = ET.SubElement(map_tag, 'cutcorners')
         corners_tag.text = self.algo_ops['cutcorners'].get()
-        squeeze_tag = ET.SubElement(algorithm_tag, 'allowsqueeze')
+        squeeze_tag = ET.SubElement(map_tag, 'allowsqueeze')
         squeeze_tag.text = self.algo_ops['allowsqueeze'].get()
-
-        options_tag = ET.SubElement(root_tag, 'options')
-        loglevel_tag = ET.SubElement(options_tag, 'loglevel')
-        loglevel_tag.text = self.algo_ops['loglevel'].get()
-        logpath_tag = ET.SubElement(options_tag, 'logpath')
-        logfile_tag = ET.SubElement(options_tag, 'logfilename')
 
         output = ET.tostring(root_tag).decode()
         try:
@@ -1138,7 +1123,7 @@ class Simulation(tk.Frame):
         self.master.title("Simulation in progress")
         self.create_buttons()
         self.active = False
-        self.total_steps = self.map_info.turns[-1][3] + 1
+        self.total_steps = self.map_info.turns[-1][0] + 1
         self.step_counter.configure(text = "Steps: 0/" + str(self.total_steps))
 
     def continue_(self):
@@ -1338,27 +1323,27 @@ class MapPlay(Map):
         moved = set()
         self.current_step += 1
         while self.current_turn < len(self.turns):
-            if self.turns[self.current_turn][3] == self.current_step:
+            if self.turns[self.current_turn][0] == self.current_step:
                 break
             turn = self.turns[self.current_turn]
-            if turn[0] in moved:
+            if turn[1] in moved:
                 log = "Step number {}, agent {} was moved twice!".format(self.current_step, 
-                                                                                   turn[0])
+                                                                               turn[1] + 1)
                 messagebox.showerror("Ultimate trace tool", log)
                 return False
-            moved.add(turn[0])
-            current_pos = self.agents[turn[0]].start
-            self.last_position[turn[0]].append(current_pos)
-            dx = turn[1] - current_pos[0]
-            dy = turn[2] - current_pos[1]
-            log = self.check_movement(current_pos, dx, dy, turn[0])
+            moved.add(turn[1])
+            current_pos = self.agents[turn[1]].start
+            self.last_position[turn[1]].append(current_pos)
+            dx = turn[2] - current_pos[0]
+            dy = turn[3] - current_pos[1]
+            log = self.check_movement(current_pos, dx, dy, turn[1])
             if log != "OK":
                 messagebox.showerror("Ultimate trace tool", log)
                 return False
-            self.delete_agent(turn[0])
-            self.add_agent(turn[1], turn[2], turn[0])
-            self.add_agent(self.map_info.finish_x[turn[0]], 
-                           self.map_info.finish_y[turn[0]], turn[0])
+            self.delete_agent(turn[1])
+            self.add_agent(turn[2], turn[3], turn[1])
+            self.add_agent(self.map_info.finish_x[turn[1]], 
+                           self.map_info.finish_y[turn[1]], turn[1])
             self.current_turn += 1
         return True
 
@@ -1367,14 +1352,14 @@ class MapPlay(Map):
             return
         self.current_step -= 1
         self.current_turn -= 1
-        while self.turns[self.current_turn][3] == self.current_step:
+        while self.turns[self.current_turn][0] == self.current_step:
             turn = self.turns[self.current_turn]
-            new_pos = self.last_position[turn[0]][-1]
-            self.last_position[turn[0]].pop()
-            self.delete_agent(turn[0])
-            self.add_agent(new_pos[0], new_pos[1], turn[0])
-            self.add_agent(self.map_info.finish_x[turn[0]], self.map_info.finish_y[turn[0]], 
-                                                                                    turn[0])
+            new_pos = self.last_position[turn[1]][-1]
+            self.last_position[turn[1]].pop()
+            self.delete_agent(turn[1])
+            self.add_agent(new_pos[0], new_pos[1], turn[1])
+            self.add_agent(self.map_info.finish_x[turn[1]], self.map_info.finish_y[turn[1]], 
+                                                                                    turn[1])
             if self.current_turn == 0:
                 return
             self.current_turn -= 1

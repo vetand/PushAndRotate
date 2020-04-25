@@ -106,7 +106,7 @@ PushAndRotate::PushAndRotate(const std::string& file_name_input,
         this->reset_map();
     }
     PostProcess(this->map, this->logger.moves, parallel_mode);
-    this->logger.prepare_answer();
+    this->logger.prepare_answer(this->map);
     bool correct = this->check_answer();
     std::cout << std::endl;
     auto end = std::chrono::steady_clock::now();

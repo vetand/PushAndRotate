@@ -1,0 +1,92 @@
+<root>
+    <map>
+        <width>5</width>
+        <height>8</height>
+        <agents>
+            <agent id="1">
+                <startx>0</startx>
+                <starty>4</starty>
+                <finishx>4</finishx>
+                <finishy>4</finishy>
+            </agent>
+            <agent id="2">
+                <startx>2</startx>
+                <starty>7</starty>
+                <finishx>2</finishx>
+                <finishy>0</finishy>
+            </agent>
+            <agent id="3">
+                <startx>2</startx>
+                <starty>0</starty>
+                <finishx>2</finishx>
+                <finishy>7</finishy>
+            </agent>
+            <agent id="4">
+                <startx>4</startx>
+                <starty>4</starty>
+                <finishx>0</finishx>
+                <finishy>4</finishy>
+            </agent>
+        </agents>
+        <grid>
+            <row>1 1 0 1 1</row>
+            <row>1 1 0 1 1</row>
+            <row>1 1 0 1 1</row>
+            <row>1 1 0 1 1</row>
+            <row>0 0 0 0 0</row>
+            <row>1 1 0 1 1</row>
+            <row>1 1 0 1 1</row>
+            <row>1 1 0 1 1</row>
+        </grid>
+        <allowdiagonal>true</allowdiagonal>
+        <cutcorners>true</cutcorners>
+        <allowsqueeze>true</allowsqueeze>
+    </map>
+    <log>
+        <general>
+            <makespan>18</makespan>
+            <summ-of-costs>92</summ-of-costs>
+            <moving-phase-time>2ms</moving-phase-time>
+            <post-processing-time>0ms</post-processing-time>
+            <total-time>2ms</total-time>
+        </general>
+        <paths>
+            <agent id="1">
+                <movement x="1" y="4" step="0"/>
+                <movement x="2" y="4" step="1"/>
+                <movement x="3" y="4" step="2"/>
+                <movement x="2" y="3" step="3"/>
+                <movement x="3" y="4" step="6"/>
+                <movement x="4" y="4" step="7"/>
+            </agent>
+            <agent id="2">
+                <movement x="2" y="6" step="0"/>
+                <movement x="2" y="5" step="1"/>
+                <movement x="2" y="4" step="9"/>
+                <movement x="2" y="3" step="10"/>
+                <movement x="1" y="4" step="11"/>
+                <movement x="2" y="3" step="14"/>
+                <movement x="2" y="2" step="15"/>
+                <movement x="2" y="1" step="16"/>
+                <movement x="2" y="0" step="17"/>
+            </agent>
+            <agent id="3">
+                <movement x="2" y="1" step="0"/>
+                <movement x="2" y="2" step="1"/>
+                <movement x="2" y="3" step="12"/>
+                <movement x="2" y="4" step="13"/>
+                <movement x="2" y="5" step="14"/>
+                <movement x="2" y="6" step="15"/>
+                <movement x="2" y="7" step="16"/>
+            </agent>
+            <agent id="4">
+                <movement x="3" y="4" step="4"/>
+                <movement x="2" y="4" step="5"/>
+                <movement x="3" y="4" step="8"/>
+                <movement x="2" y="4" step="15"/>
+                <movement x="1" y="4" step="16"/>
+                <movement x="0" y="4" step="17"/>
+            </agent>
+        </paths>
+    </log>
+</root>

@@ -251,7 +251,7 @@ public:
             }
         }
         auto moving_phase = std::chrono::steady_clock::now();
-        this->logger.prepare_answer();
+        this->logger.prepare_answer(map);
         bool correct = this->check_answer();
         std::cout << std::endl;
         auto end = std::chrono::steady_clock::now();

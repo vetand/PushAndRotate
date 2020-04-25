@@ -1,4 +1,5 @@
 import xml.dom.minidom as minidom
+import xml.etree.ElementTree as ET
 import tkinter as tk
 from tkinter import messagebox
 
@@ -91,10 +92,9 @@ class XmlParser:
             self.correct = False
             return
         try:
-            algo_tag = doc.getElementsByTagName("algorithm")[0]
-            self.diag = algo_tag.getElementsByTagName("allowdiagonal")[0].childNodes[0].data
-            self.corners = algo_tag.getElementsByTagName("cutcorners")[0].childNodes[0].data
-            self.squeeze = algo_tag.getElementsByTagName("allowsqueeze")[0].childNodes[0].data
+            self.diag = map_tag.getElementsByTagName("allowdiagonal")[0].childNodes[0].data
+            self.corners = map_tag.getElementsByTagName("cutcorners")[0].childNodes[0].data
+            self.squeeze = map_tag.getElementsByTagName("allowsqueeze")[0].childNodes[0].data
         except Exception:
             messagebox.showerror("Ultimate trace tool", "Incorrect movement options!")
             self.correct = False
@@ -102,17 +102,21 @@ class XmlParser:
         if mode == "load":
             return
         log_tag = doc.getElementsByTagName("log")[0]
-        turns_tag = doc.getElementsByTagName("turn")
+        paths_tag = log_tag.getElementsByTagName("paths")[0]
+        agent_tags = paths_tag.getElementsByTagName("agent")
         self.turns = []
-        for turn_tag in turns_tag:
-            list_ = turn_tag.attributes.items()
-            for item in list_:
-                if item[0] == 'x':
-                    x_attribute = int(item[1])
-                elif item[0] == 'y':
-                    y_attribute = int(item[1])
-                elif item[0] == 'step':
-                    step_attribute = int(item[1])
-                else:
-                    agent_attribute = int(item[1]) - 1
-            self.turns.append([agent_attribute, x_attribute, y_attribute, step_attribute])
+        current_id = 0
+        for agent_tag in agent_tags:
+            movement_tags = agent_tag.getElementsByTagName("movement")
+            for movement in movement_tags:
+                list_ = movement.attributes.items()
+                for item in list_:
+                    if item[0] == 'x':
+                        x_attribute = int(item[1])
+                    elif item[0] == 'y':
+                        y_attribute = int(item[1])
+                    elif item[0] == 'step':
+                        step_attribute = int(item[1])
+                self.turns.append((step_attribute, current_id, x_attribute, y_attribute))
+            current_id += 1
+        self.turns.sort()

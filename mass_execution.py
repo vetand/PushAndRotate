@@ -14,20 +14,21 @@ def collect_log(directory, files_in_directory):
         try:
             doc = minidom.parse(directory + "/" + name)
             log_tag = doc.getElementsByTagName("log")[0]
-            steps_tag = log_tag.getElementsByTagName("total-steps")[0]
-            quality_tag = log_tag.getElementsByTagName("paths-summary")[0]
-            moving_time_tag = log_tag.getElementsByTagName("moving-phase-time")[0]
-            post_time_tag = log_tag.getElementsByTagName("post-processing-time")[0]
+            general_tag = doc.getElementsByTagName("general")[0]
+            steps_tag = general_tag.getElementsByTagName("makespan")[0]
+            quality_tag = general_tag.getElementsByTagName("summ-of-costs")[0]
+            moving_time_tag = general_tag.getElementsByTagName("moving-phase-time")[0]
+            post_time_tag = general_tag.getElementsByTagName("post-processing-time")[0]
             total_steps += int(steps_tag.childNodes[0].data)
             total_length += int(quality_tag.childNodes[0].data)
-            moving_time += int(moving_time_tag.childNodes[0].data)
-            post_time += int(post_time_tag.childNodes[0].data)
+            moving_time += int(moving_time_tag.childNodes[0].data[:-2:])
+            post_time += int(post_time_tag.childNodes[0].data[:-2:])
         except Exception:
             pass
 
     simulations = len(files_in_directory)
-    print("Average number of steps: {}".format(total_steps // simulations))
-    print("Average paths summary: {}".format(total_length // simulations))
+    print("Average makespan: {}".format(total_steps // simulations))
+    print("Average summ of costs: {}".format(total_length // simulations))
     print("Average time: {}ms".format((moving_time + post_time) // simulations))
 
 if __name__ == "__main__":

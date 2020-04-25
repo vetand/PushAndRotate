@@ -40,10 +40,8 @@ void Map::get_map(const char* file_name) {
         tinyxml2::XMLElement *map = root->FirstChildElement("map");
         tinyxml2::XMLElement *height_tag = map->FirstChildElement("height");
         tinyxml2::XMLElement *width_tag = map->FirstChildElement("width");
-        tinyxml2::XMLElement *cellsize_tag = map->FirstChildElement("cellsize");
         this->height = atoi(height_tag->GetText());
         this->width = atoi(width_tag->GetText());
-        this->cell_size = atoi(cellsize_tag->GetText());
         tinyxml2::XMLElement *agents_tag = map->FirstChildElement("agents");
         tinyxml2::XMLElement *agent_tag;
         if (agents_tag == NULL) {
@@ -52,6 +50,8 @@ void Map::get_map(const char* file_name) {
         for (agent_tag = agents_tag->FirstChildElement("agent"); agent_tag != NULL; 
                          agent_tag = agent_tag->NextSiblingElement("agent")) {
             Agent new_agent;
+            const tinyxml2::XMLAttribute* id_attribute = agent_tag->FirstAttribute();
+            new_agent.id = atoi(id_attribute->Value());
             tinyxml2::XMLElement *startx_tag = agent_tag->FirstChildElement("startx");
             tinyxml2::XMLElement *starty_tag = agent_tag->FirstChildElement("starty");
             tinyxml2::XMLElement *finishx_tag = agent_tag->FirstChildElement("finishx");
@@ -81,12 +81,11 @@ void Map::get_map(const char* file_name) {
         if (counter != this->height) {
             return;
         }
-        tinyxml2::XMLElement *algo_tag = root->FirstChildElement("algorithm");
-        tinyxml2::XMLElement *diagonal_tag = algo_tag->FirstChildElement("allowdiagonal");
+        tinyxml2::XMLElement *diagonal_tag = map->FirstChildElement("allowdiagonal");
         this->allow_diagonal = !strcmp(diagonal_tag->GetText(), (char*)("true"));
-        tinyxml2::XMLElement *corners_tag = algo_tag->FirstChildElement("cutcorners");
+        tinyxml2::XMLElement *corners_tag = map->FirstChildElement("cutcorners");
         this->cut_corners = !strcmp(corners_tag->GetText(), (char*)("true"));
-        tinyxml2::XMLElement *squeeze_tag = algo_tag->FirstChildElement("allowsqueeze");
+        tinyxml2::XMLElement *squeeze_tag = map->FirstChildElement("allowsqueeze");
         this->allow_squeeze = !strcmp(squeeze_tag->GetText(), (char*)("true"));
         this->initialized = true;
     } catch (...) {
@@ -119,10 +118,6 @@ bool Map::is_obstacle(int i, int j) const {
 
 bool Map::within_map(int i, int j) const {
     return (i >= 0 && j >= 0 && i < this->width && j < this->height);
-}
-
-double Map::get_cell_size() const {
-    return this->cell_size;
 }
 
 bool Map::is_start(int x, int y) const {

@@ -30,6 +30,7 @@ public:
 class Logger {
 public:
     std::vector<Movement> moves;
+    std::vector<std::vector<Movement>> final_answer;
     char const* file_name;
 
     Logger(char const* input_name): file_name(input_name) {}
@@ -42,21 +43,18 @@ public:
         root_tag->InsertEndChild(map_tag);
         tinyxml2::XMLElement* width_tag = document.NewElement("width");
         tinyxml2::XMLElement* height_tag = document.NewElement("height");
-        tinyxml2::XMLElement* cellsize_tag = document.NewElement("cellsize");
         map_tag->InsertEndChild(width_tag);
         map_tag->InsertEndChild(height_tag);
-        map_tag->InsertEndChild(cellsize_tag);
         char buffer[NUMBER_LENGTH];
         snprintf(buffer, sizeof(buffer), "%d", map.get_width());
         width_tag->InsertEndChild(document.NewText(buffer));
         snprintf(buffer, sizeof(buffer), "%d", map.get_height());
         height_tag->InsertEndChild(document.NewText(buffer));
-        snprintf(buffer, sizeof(buffer), "%g", map.get_cell_size());
-        cellsize_tag->InsertEndChild(document.NewText(buffer));
         tinyxml2::XMLElement* agents_tag = document.NewElement("agents");
         map_tag->InsertEndChild(agents_tag);
         for (int ind = 0; ind < map.number_of_agents; ++ind) {
             tinyxml2::XMLElement* agent_tag = document.NewElement("agent");
+            agent_tag->SetAttribute("id", (int)map.agents[ind].id);
             agents_tag->InsertEndChild(agent_tag);
             tinyxml2::XMLElement* startx_tag = document.NewElement("startx");
             tinyxml2::XMLElement* starty_tag = document.NewElement("starty");
@@ -89,14 +87,12 @@ public:
             grid_tag->InsertEndChild(row_tag);
             row_tag->InsertEndChild(document.NewText(str_value.c_str()));
         }
-        tinyxml2::XMLElement* algo_tag = document.NewElement("algorithm");
-        root_tag->InsertEndChild(algo_tag);
         tinyxml2::XMLElement* diagonal_tag = document.NewElement("allowdiagonal");
         tinyxml2::XMLElement* corner_tag = document.NewElement("cutcorners");
         tinyxml2::XMLElement* squeeze_tag = document.NewElement("allowsqueeze");
-        algo_tag->InsertEndChild(diagonal_tag);
-        algo_tag->InsertEndChild(corner_tag);
-        algo_tag->InsertEndChild(squeeze_tag);
+        map_tag->InsertEndChild(diagonal_tag);
+        map_tag->InsertEndChild(corner_tag);
+        map_tag->InsertEndChild(squeeze_tag);
         if (map.allow_diagonal) {
             diagonal_tag->InsertEndChild(document.NewText("true"));
         } else {
@@ -117,50 +113,75 @@ public:
 
     void print_log_second(const Map& map, int steps, long long quality,
                                         double time_1, double time_2) {
-        this->prepare_answer();
+        this->prepare_answer(map);
         tinyxml2::XMLDocument document;
         document.LoadFile(this->file_name);
         tinyxml2::XMLElement* root_tag = document.FirstChildElement("root");
         tinyxml2::XMLElement* log_tag = document.NewElement("log");
         root_tag->InsertEndChild(log_tag);
+        tinyxml2::XMLElement* general_tag = document.NewElement("general");
+        log_tag->InsertEndChild(general_tag);
         char buffer[NUMBER_LENGTH];
-        tinyxml2::XMLElement* steps_tag = document.NewElement("total-steps");
+        tinyxml2::XMLElement* steps_tag = document.NewElement("makespan");
         snprintf(buffer, sizeof(buffer), "%d", steps);
         steps_tag->InsertEndChild(document.NewText(buffer));
-        log_tag->InsertEndChild(steps_tag);
-        tinyxml2::XMLElement* quality_tag = document.NewElement("paths-summary");
+        general_tag->InsertEndChild(steps_tag);
+        tinyxml2::XMLElement* quality_tag = document.NewElement("summ-of-costs");
         snprintf(buffer, sizeof(buffer), "%lld", quality);
         quality_tag->InsertEndChild(document.NewText(buffer));
-        log_tag->InsertEndChild(quality_tag);
+        general_tag->InsertEndChild(quality_tag);
         tinyxml2::XMLElement* time1_tag = document.NewElement("moving-phase-time");
         snprintf(buffer, sizeof(buffer), "%g", time_1);
+        snprintf(buffer + strlen(buffer), 3, "%s", "ms");
         time1_tag->InsertEndChild(document.NewText(buffer));
-        log_tag->InsertEndChild(time1_tag);
+        general_tag->InsertEndChild(time1_tag);
         tinyxml2::XMLElement* time2_tag = document.NewElement("post-processing-time");
         snprintf(buffer, sizeof(buffer), "%g", time_2);
+        snprintf(buffer + strlen(buffer), 3, "%s", "ms");
         time2_tag->InsertEndChild(document.NewText(buffer));
-        log_tag->InsertEndChild(time2_tag);
-        for (auto move: this->moves) {
-            tinyxml2::XMLElement* turn_tag = document.NewElement("turn");
-            turn_tag->SetAttribute("agent", move.agent_number + 1);
-            turn_tag->SetAttribute("x", move.current_id % map.get_width());
-            turn_tag->SetAttribute("y", move.current_id / map.get_width());
-            turn_tag->SetAttribute("step", move.step);
-            log_tag->InsertEndChild(turn_tag);
+        general_tag->InsertEndChild(time2_tag);
+        tinyxml2::XMLElement* time3_tag = document.NewElement("total-time");
+        snprintf(buffer, sizeof(buffer), "%g", time_1 + time_2);
+        snprintf(buffer + strlen(buffer), 3, "%s", "ms");
+        time3_tag->InsertEndChild(document.NewText(buffer));
+        general_tag->InsertEndChild(time3_tag);
+        tinyxml2::XMLElement* paths_tag = document.NewElement("paths");
+        log_tag->InsertEndChild(paths_tag);
+        for (int ind = 0; ind < map.number_of_agents; ++ind) {
+            tinyxml2::XMLElement* agent_tag = document.NewElement("agent");
+            agent_tag->SetAttribute("id", (int)map.agents[ind].id);
+            for (auto move: this->final_answer[ind]) {
+                tinyxml2::XMLElement* movement_tag = document.NewElement("movement");
+                movement_tag->SetAttribute("x", move.current_id % map.get_width());
+                movement_tag->SetAttribute("y", move.current_id / map.get_width());
+                movement_tag->SetAttribute("step", move.step);
+                agent_tag->InsertEndChild(movement_tag);
+            }
+            paths_tag->InsertEndChild(agent_tag);
         }
         document.SaveFile(this->file_name);
     }
 
-    void prepare_answer() {
+    void prepare_answer(const Map& map) {
         std::sort(this->moves.begin(), this->moves.end());
         int current_step = 0;
         int real_step = 0;
         for (int ind = 0; ind < this->moves.size(); ++ind) {
+            if (this->moves[ind].previous_id == this->moves[ind].current_id) {
+                continue;
+            }
             if (ind > 0 && this->moves[ind].step != current_step) {
                 ++real_step;
             }
             current_step = this->moves[ind].step;
             this->moves[ind].step = real_step;
+        }
+        this->final_answer.resize(map.number_of_agents);
+        for (int ind = 0; ind < this->final_answer.size(); ++ind) {
+            this->final_answer[ind].clear();
+        }
+        for (int ind = 0; ind < this->moves.size(); ++ind) {
+            this->final_answer[this->moves[ind].agent_number].push_back(this->moves[ind]);
         }
     }
 };
