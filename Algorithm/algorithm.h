@@ -200,7 +200,7 @@ private:
         std::unordered_set<int> deleted;
         std::vector<std::set<int>> events;
         std::vector<std::list<int>> personal_moves;
-        std::vector<std::vector<std::set<int>>> local_moves;
+        std::vector<std::vector<std::unordered_map<int, std::set<int>>>> local_moves;
 
         void init(const Map& map, std::vector<Movement>& moves);
 

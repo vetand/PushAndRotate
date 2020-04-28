@@ -21,6 +21,7 @@ bool PushAndRotate::check_answer() {
     for (const auto& movement: this->logger.moves) {
         int x = movement.current_id % this->map.get_width();
         int y = movement.current_id / this->map.get_width();
+        int agent = movement.agent_number;
         int step = movement.step;
         if (!this->map.within_map(x, y)) {
             std::cout << "Step " << step << ", agent " << movement.agent_number + 1
@@ -32,7 +33,7 @@ bool PushAndRotate::check_answer() {
                                                  << " hits obstacle!" << std::endl;
             return false;
         }
-        if (this->map.is_start(x, y)) {
+        if (this->map.is_start(x, y) && this->map.get_agent(x, y) != agent) {
             std::cout << "Step " << step << ", agent " << movement.agent_number + 1
                                             << " hits another agent!" << std::endl;
             return false;

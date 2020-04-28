@@ -164,6 +164,14 @@ public:
 
     void prepare_answer(const Map& map) {
         std::sort(this->moves.begin(), this->moves.end());
+        std::vector<Movement> tmp;
+        for (int ind = 0; ind < this->moves.size(); ++ind) {
+            if (this->moves[ind].previous_id == this->moves[ind].current_id) {
+                continue;
+            }
+            tmp.push_back(this->moves[ind]);
+        }
+        this->moves = tmp;
         int current_step = 0;
         int real_step = 0;
         for (int ind = 0; ind < this->moves.size(); ++ind) {
