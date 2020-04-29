@@ -7,23 +7,42 @@
 #include <unordered_map>
 #include <unordered_set>
 
+const int SCALE = 5;
+const int FINISH_WEIGHT = 5;
+
 class Priorities {
 private:
     std::vector<std::unordered_set<int>> reserved;
     std::vector<std::vector<int>> path;
     int max_time;
 
-    void init(const Map& map) {
-        for (int step = 0; step < this->max_time; ++step) {
-            std::unordered_set<int> zero;
-            this->reserved.push_back(zero);
+    void init(const Map& map, const std::vector<Movement>& moves) {
+        this->path.resize(map.number_of_agents);
+        this->reserved.resize(moves.back().step + FINISH_WEIGHT + 2);
+        this->max_time = moves.back().step + FINISH_WEIGHT;
+        for (int ind = 0; ind < map.number_of_agents; ++ind) {
+            int id = map.agents[ind].start_y * map.get_width() + map.agents[ind].start_x;
+            this->path[ind].push_back(id);
+            this->reserved[0].insert(id);
         }
-        for (int agent = 0; agent < map.number_of_agents; ++agent) {
-            std::vector<int> zero;
-            this->path.push_back(zero);
-            int start_id = map.agents[agent].start_x + map.agents[agent].start_y * map.get_width();
-            this->reserved[0].insert(start_id);
-            this->reserved[1].insert(start_id);
+        int pos = 0;
+        for (int step = 0; step <= moves.back().step; ++step) {
+            int ind = pos;
+            for (int number = 0; number < map.number_of_agents; ++number) {
+                this->reserved[step + 1].insert(this->path[number].back());
+                this->path[number].push_back(this->path[number].back());
+            }
+            while (ind < moves.size() && moves[ind].step == step) {
+                int agent = moves[ind].agent_number;
+                int from = moves[ind].previous_id;
+                int to = moves[ind].current_id;
+                int step = moves[ind].step;
+                this->reserved[step + 1].insert(to);
+                this->reserved[step + 1].erase(from);
+                this->path[agent].back() = to;
+                ++ind;
+            }
+            pos = ind;
         }
     }
 
@@ -41,6 +60,9 @@ private:
             int x2 = finish_id % map.get_width();
             int y2 = finish_id / map.get_width();
             this->h_value = std::max(std::abs(x1 - x2), std::abs(y1 - y2));
+            if (map.is_finish(x1, y1)) {
+                this->h_value += FINISH_WEIGHT;
+            }
             this->g_value = input_g_value;
             this->is_finish = (current_id == finish_id);
         }
@@ -68,8 +90,6 @@ private:
     };
 
     std::vector<int> a_star(int start_id, int finish_id) {
-        this->reserved[0].erase(start_id);
-        this->reserved[1].erase(start_id);
         std::priority_queue<AstarNode> queue;
         std::set<std::pair<int, int>> visited;
         std::map<std::pair<int, int>, std::pair<int, int>> previous_id;
@@ -83,7 +103,8 @@ private:
             if (current.id == finish_id) {
                 bool able_stop = true;
                 for (int step = current.g_value; step < this->max_time; ++step) {
-                    if (this->reserved[step].find(current.id) != this->reserved[step].end()) {
+                    if (this->reserved[std::max(step, 0)].find(current.id) != 
+                                        this->reserved[std::max(step, 0)].end()) {
                         able_stop = false;
                         break;
                     }
@@ -115,14 +136,17 @@ private:
                                             this->reserved[current.g_value + 1].end()) {
                     continue;
                 }
+                if (current.g_value < this->max_time - 2 && 
+                                this->reserved[current.g_value + 2].find(neighbor) != 
+                                this->reserved[current.g_value + 2].end()) {
+                    continue;
+                }
                 previous_id[{new_neighbor.id, new_neighbor.g_value}] = 
                                          {current.id, current.g_value};
                 queue.push(new_neighbor);
                 visited.insert({new_neighbor.id, new_neighbor.g_value});
             }
         }
-        this->reserved[0].insert(start_id);
-        this->reserved[1].insert(start_id);
         std::vector<int> answer;
         if (path_found == false) {
             answer.push_back(-1);
@@ -144,17 +168,24 @@ private:
         return answer;
     }
 
+    void drop_path(int number) {
+        for (int ind = 0; ind < this->path[number].size(); ++ind) {
+            this->reserved[ind].erase(path[number][ind]);
+        }
+        this->path[number].clear();
+    }
+
     void perform_agent(int number, const Map& map) {
+        this->drop_path(number);
         int start_id = map.agents[number].start_x + map.agents[number].start_y * map.get_width();
         int finish_id = map.agents[number].finish_x + 
                         map.agents[number].finish_y * map.get_width();
         std::vector<int> new_path = this->a_star(start_id, finish_id);
-        for (int ind = 0; ind < (int)new_path.size() - 1; ++ind) {
-            this->reserved[ind].insert(new_path[ind]);
-            this->reserved[ind].insert(new_path[ind + 1]);
+        while (new_path.size() < this->max_time) {
+            new_path.push_back(new_path.back());
         }
-        for (int time = new_path.size(); time < this->max_time; ++time) {
-            this->reserved[time].insert(new_path.back());
+        for (int ind = 0; ind < (int)new_path.size(); ++ind) {
+            this->reserved[ind].insert(new_path[ind]);
         }
         this->path[number] = new_path;
     }
@@ -179,7 +210,7 @@ private:
             if (this->map.is_start(x, y) && this->map.get_agent(x, y) != 
                                                 movement.agent_number) {
                 std::cout << "Step " << step << ", agent " << movement.agent_number + 1
-                                                << " hits another agent!" << std::endl;
+                        << " hits agent " << this->map.get_agent(x, y) + 1 << std::endl;
                 return false;
             }
             int old_x = movement.previous_id % this->map.get_width();
@@ -214,7 +245,7 @@ private:
             if (finished_agents.find(this->logger.moves[ind].agent_number) == 
                                                                 finished_agents.end()) {
                 finished_agents.insert(this->logger.moves[ind].agent_number);
-                answer += ind + 1;
+                answer += this->logger.moves[ind].step;
             }
         }
         return answer;
@@ -226,7 +257,7 @@ public:
     Map map;
 
     Priorities(const std::string& file_name_input, const std::string& file_name_output,
-                                                                    int input_max_time):
+                                                    const std::vector<Movement> moves):
                                               logger(Logger(file_name_output.c_str())) {
         auto begin = std::chrono::steady_clock::now();
         std::cout << "==================== New simulation ====================" << std::endl;
@@ -236,10 +267,11 @@ public:
             return;
         }
         this->logger.print_log_first(this->map);
-        this->max_time = input_max_time;
-        this->init(this->map);
-        for (int agent = 0; agent < this->map.number_of_agents; ++agent) {
-            this->perform_agent(agent, this->map);
+        this->init(this->map, moves);
+        for (int cnt = 0; cnt < SCALE; ++cnt) {
+            for (int agent = 0; agent < this->map.number_of_agents; ++agent) {
+                this->perform_agent(agent, this->map);
+            }
         }
         for (int agent = 0; agent < map.number_of_agents; ++agent) {
             for (int ind = 0; ind < this->path[agent].size() - 1; ++ind) {

@@ -35,7 +35,7 @@ bool PushAndRotate::check_answer() {
         }
         if (this->map.is_start(x, y) && this->map.get_agent(x, y) != agent) {
             std::cout << "Step " << step << ", agent " << movement.agent_number + 1
-                                            << " hits another agent!" << std::endl;
+                    << " hits agent " << this->map.get_agent(x, y) + 1 << std::endl;
             return false;
         }
         int old_x = movement.previous_id % this->map.get_width();
@@ -70,7 +70,7 @@ long long PushAndRotate::compute_quality() const {
     for (int ind = (int)this->logger.moves.size() - 1; ind >= 0; --ind) {
         if (finished_agents.find(this->logger.moves[ind].agent_number) == finished_agents.end()) {
             finished_agents.insert(this->logger.moves[ind].agent_number);
-            answer += ind + 1;
+            answer += this->logger.moves[ind].step;
         }
     }
     return answer;

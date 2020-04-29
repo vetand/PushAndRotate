@@ -50,14 +50,15 @@ if __name__ == "__main__":
                 os.mkdir(output_directory)
             except Exception:
                 pass
-
-            if len(sys.argv) >= 3 and sys.argv[2] == "parallel":
-                command = "Bin/PushAndRotate {} {} parallel".format(scene_directory + "/" + name,
-                                                                    output_directory + "/" + name)
-                if len(sys.argv) >= 4 and sys.argv[3] == "priorities":
-                    command = "Bin/PushAndRotate {} {} parallel priorities".format(
-                                                                    scene_directory + "/" + name,
-                                                                    output_directory + "/" + name)
+            if len(sys.argv) >= 3:
+                if sys.argv[2] == "parallel":
+                    command = "Bin/PushAndRotate {} {} parallel".format(
+                                                            scene_directory + "/" + name,
+                                                            output_directory + "/" + name)
+                if sys.argv[2] == "priorities":
+                    command = "Bin/PushAndRotate {} {} priorities".format(
+                                                            scene_directory + "/" + name,
+                                                            output_directory + "/" + name)
             else:
                 command = "Bin/PushAndRotate {} {}".format(scene_directory + "/" + name,
                                                            output_directory + "/" + name)
