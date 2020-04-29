@@ -341,9 +341,6 @@ class ManualGenerator(tk.Frame):
             messagebox.showerror("Ultimate trace tool", "Empty map!")
             return False
 
-        if len(self.map.agents) == 0:
-            messagebox.showerror("Ultimate trace tool", "No agents on the map!")
-            return False
         return True
 
     def change_map(self):

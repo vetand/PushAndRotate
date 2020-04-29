@@ -7,8 +7,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
-const int SCALE = 5;
-const int FINISH_WEIGHT = 5;
+const int SCALE = 1;
+const int FINISH_WEIGHT = 0;
 
 class Priorities {
 private:
@@ -19,7 +19,7 @@ private:
     void init(const Map& map, const std::vector<Movement>& moves) {
         this->path.resize(map.number_of_agents);
         this->reserved.resize(moves.back().step + FINISH_WEIGHT + 2);
-        this->max_time = moves.back().step + FINISH_WEIGHT;
+        this->max_time = moves.back().step + FINISH_WEIGHT + 1;
         for (int ind = 0; ind < map.number_of_agents; ++ind) {
             int id = map.agents[ind].start_y * map.get_width() + map.agents[ind].start_x;
             this->path[ind].push_back(id);
